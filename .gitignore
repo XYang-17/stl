@@ -1,0 +1,5 @@
+*.exe
+*.i
+*.o
+run.cpp
+
