@@ -1,8 +1,8 @@
 #ifndef _YXXX_PRIORITY_QUEUE_H_
 #define _YXXX_PRIORITY_QUEUE_H_
 
-#include "array.h"
-#include "heap.h"
+#include "./array.h"
+#include "./heap.h"
 #include "../function.h"
 
 namespace stl{

@@ -1,7 +1,6 @@
 #ifndef _YXXX_FUNCTION_H_
 #define _YXXX_FUNCTION_H_
 
-#include <bits/c++config.h>
 #include "adaptive_c++config.h"
 
 namespace stl{
@@ -188,19 +187,19 @@ namespace stl{
 };
 
 namespace stl{
-    bool is_prime(std::size_t _n) _YXXX_NOEXCEPT{
+    bool is_prime(stl::size_t _n) _YXXX_NOEXCEPT{
         if(_n <= 1) return false;
         if(_n <= 3) return true;
         if(!(_n & 1) || 0 == _n % 3) return false;
         
-        for(std::size_t i = 5; i * i <= _n; i += 6) {
+        for(stl::size_t i = 5; i * i <= _n; i += 6) {
             if (_n % i == 0 || _n % (i + 2) == 0) {
                 return false;
             }
         }
         return true;
     }
-    std::size_t min_prime(std::size_t _n)
+    stl::size_t min_prime(stl::size_t _n)
     _YXXX_NOEXCEPT{
         while(!stl::is_prime(_n)) ++_n;
         return _n;

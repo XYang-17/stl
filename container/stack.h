@@ -1,7 +1,7 @@
 #ifndef _YXXX_STACK_H_
 #define _YXXX_STACK_H_
 
-#include "array.h"
+#include "./array.h"
 
 namespace stl{
     // std::stack使用std::deque作为默认的底层序列容器，有以下优势：

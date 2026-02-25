@@ -1,13 +1,14 @@
 #ifndef _YXXX_TREE_SET_H_
 #define _YXXX_TREE_SET_H_
 
-#include "tree/rb_tree.h"
+#include <bits/stl_pair.h>
+#include "./tree/tree_base.h"
 #include "../function.h"
 
 namespace stl{
     template<typename _ValueType,
         typename _ExtractKey = stl::_self,
-        typename _KeyComp = std::less<_ValueType>,
+        typename _KeyComp = stl::less_than<_ValueType>,
         typename _Alloc = _alloc::allocator<_ValueType>>
     class tree_set{
     protected:
@@ -164,7 +165,7 @@ namespace stl{
     };
     template<typename _ValueType,
         typename _ExtractKey = stl::_self,
-        typename _KeyComp = std::less<_ValueType>,
+        typename _KeyComp = stl::less_than<_ValueType>,
         typename _Alloc = _alloc::allocator<_ValueType>>
     class tree_multiset{
     protected:

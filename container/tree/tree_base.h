@@ -1,7 +1,7 @@
 #ifndef _YXXX_TREE_BASE_H_
 #define _YXXX_TREE_BASE_H_
 
-#include "../../alloc.h"
+#include "../../allocator/allocator.h"
 
 namespace _tree{
     template<typename _Type>
@@ -11,7 +11,7 @@ namespace _tree{
         typedef const _Type*   const_pointer;
         typedef _Type&         reference;
         typedef const _Type&   const_reference;
-        typedef std::size_t    size_type;
+        typedef stl::size_t    size_type;
         typedef std::ptrdiff_t difference_type;
 
         typedef _tree_node_base*  self_pointer;

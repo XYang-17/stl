@@ -1,7 +1,7 @@
 #ifndef _YXXX_RB_TREE_H_
 #define _YXXX_RB_TREE_H_
 
-#include "tree_base.h"
+#include "./tree_base.h"
 #include "../queue.h"
 
 namespace _tree{

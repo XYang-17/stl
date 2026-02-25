@@ -1,108 +1,11 @@
-#ifndef _YXXX_ALLOC_H_
-#define _YXXX_ALLOC_H_
+#ifndef _YXXX_POOL_ALLOCATOR_H_
+#define _YXXX_POOL_ALLOCATOR_H_
 
-#include <memory>
+#include <bits/shared_ptr.h>
 #include <stdexcept>
-#include "adaptive_c++config.h"
+#include "../adaptive_c++config.h"
 
-namespace _alloc{
-    template <typename _Alloc>
-    class _alloc_traits: public std::allocator_traits<_Alloc>{
-    public:
-        typedef std::allocator_traits<_Alloc>      _allocator_traits;
-        typedef typename _allocator_traits::value_type       value_type;
-        typedef typename _allocator_traits::pointer          pointer;
-        typedef typename _allocator_traits::const_pointer    const_pointer;
-        typedef typename _allocator_traits::size_type        size_type;
-        typedef typename _allocator_traits::difference_type  difference_type;
-        typedef value_type&        reference;
-        typedef const value_type&  const_reference;
-
-        template <typename _Up>
-        using rebind_alloc = typename std::__replace_first_arg<_Alloc, _Up>::type;
-    };
-
-    template <typename _Alloc, typename _Up>
-    using alloc_rebind = typename _alloc_traits<_Alloc>::template rebind_alloc<_Up>;
-
-    template <typename _Tp>
-    class allocator{
-    public:
-        typedef _Tp             value_type;
-        typedef std::size_t     size_type;
-        typedef std::ptrdiff_t  difference_type;
-
-        typedef _Tp*            pointer;
-        typedef const _Tp*      const_pointer;
-        typedef _Tp&            reference;
-        typedef const _Tp&      const_reference;
-
-        allocator() _YXXX_NOEXCEPT = default;
-        template <typename _Up>
-        allocator(const allocator<_Up>&) _YXXX_NOEXCEPT{}
-
-        allocator& operator=(const allocator&)
-        _YXXX_NOEXCEPT{return *this;}
-
-        pointer allocate(size_type _size){
-            // ...bad_alloc...
-            // ...align...
-            return static_cast<pointer>(
-                ::operator new(sizeof(value_type) * _size)
-            );
-        }
-        void deallocate(value_type* _ptr){
-            ::operator delete(_ptr);
-        }
-        
-        void construct(pointer _ptr){
-            new ((void*)_ptr) value_type();
-        }
-        template <typename ...Args>
-        void construct(pointer _ptr, Args&&... _args){
-            new ((void*)_ptr) value_type(
-                std::forward<Args>(_args)...
-            );
-        }
-        void destroy(pointer _ptr){
-            _ptr->~value_type();
-        }
-    };
-    template <typename _Tp> bool
-    operator==(const allocator<_Tp>&, const allocator<_Tp>&){
-        return true;
-    }
-    template <typename _Tp> bool
-    operator!=(const allocator<_Tp>&, const allocator<_Tp>&){
-        return false;
-    }
-
-    // 无效分配器
-    template <typename _Tp>
-    class allocator<const _Tp>{
-    public:
-        typedef _Tp             value_type;
-        allocator()=delete;
-    };
-    template <typename _Tp>
-    class allocator<volatile _Tp>{
-    public:
-        typedef _Tp             value_type;
-        allocator()=delete;
-    };
-    template <typename _Tp>
-    class allocator<const volatile _Tp>{
-    public:
-        typedef _Tp             value_type;
-        allocator()=delete;
-    };
-    template <>
-    class allocator<void>{
-    public:
-        typedef void     value_type;
-        allocator()=delete;
-    };
-
+namespace _pool_alloc{
     #ifndef _YXXX_CHUNK_MAX_SIZE
     #define _YXXX_CHUNK_MAX_SIZE 10
     #endif
@@ -111,7 +14,7 @@ namespace _alloc{
     #elif _YXXX_CHUNK_MAX_SIZE < __INT_MAX__
     #define _YXXX_BLOCK_COUNT_TYPE int
     #else
-    #define _YXXX_BLOCK_COUNT_TYPE std::size_t
+    #define _YXXX_BLOCK_COUNT_TYPE stl::size_t
     #endif
 
     struct _chunk{
@@ -119,24 +22,23 @@ namespace _alloc{
 
         class bad_chunk: public std::runtime_error{
             public:
-                bad_chunk(const std::string& _what):
-                    std::runtime_error(_what){}
+                bad_chunk():
+std::runtime_error("Bytes of chunk is insufficient to accommodate at least one 4-byte block."){}
         };
     protected:
         void* _M_begin;
         void* _M_end;
-        std::size_t _M_block_size;
+        stl::size_t _M_block_size;
         count_type _M_first;
         count_type _M_free_count;
 
     public:
-        _chunk(void* _begin, void* _end, std::size_t _block_size){
+        _chunk(void* _begin, void* _end, stl::size_t _block_size){
             count_type _block_num = (
                 static_cast<char*>(_end) - static_cast<char*>(_begin)) 
                 / _block_size;
             if(_block_num < 1)
-                throw bad_chunk(
-                    "Bytes of chunk is insufficient to accommodate at least one 4-byte block.");
+                throw bad_chunk();
 
             _M_begin = _begin;
             _M_end = _end;
@@ -151,14 +53,14 @@ namespace _alloc{
             }
             *(reinterpret_cast<count_type*>(_block_ptr)) = -1;
         }
-        _chunk(_chunk&& _c) _YXXX_NOEXCEPT{
-            _move(std::move(_c));
-        }
+        // _chunk(_chunk&& _c) _YXXX_NOEXCEPT{
+        //     _move(std::move(_c));
+        // }
 
-        _chunk& operator=(_chunk&& _c) _YXXX_NOEXCEPT{
-            _move(std::move(_c));
-            return *this;
-        }
+        // _chunk& operator=(_chunk&& _c) _YXXX_NOEXCEPT{
+        //     _move(std::move(_c));
+        //     return *this;
+        // }
 
         void* allocate() _YXXX_NOEXCEPT{
             // 此chunk所有block已全部分配
@@ -172,7 +74,7 @@ namespace _alloc{
         bool deallocate(void* _ptr) _YXXX_NOEXCEPT{
             // 不属于此chunk，归还失败
             if(_ptr < _M_begin || _ptr >= _M_end) return false;
-            std::size_t _loc = static_cast<char*>(_ptr) - static_cast<char*>(_M_begin);
+            stl::size_t _loc = static_cast<char*>(_ptr) - static_cast<char*>(_M_begin);
             // 未在正确block地址，归还失败
             if(_loc % _M_block_size) return false;
             // 归还
@@ -194,14 +96,14 @@ namespace _alloc{
                 / _M_block_size == _M_free_count;
         }
     private:
-        void _move(_chunk&& _c) _YXXX_NOEXCEPT{
-            _M_begin = _c._M_begin;
-            _M_end = _c._M_end;
-            _M_block_size = _c._M_block_size;
-            _M_first = _c._M_first;
-            _M_free_count = _c._M_free_count;
-            _c._M_begin = _c._M_end = nullptr;
-        }
+        // void _move(_chunk&& _c) _YXXX_NOEXCEPT{
+        //     _M_begin = _c._M_begin;
+        //     _M_end = _c._M_end;
+        //     _M_block_size = _c._M_block_size;
+        //     _M_first = _c._M_first;
+        //     _M_free_count = _c._M_free_count;
+        //     _c._M_begin = _c._M_end = nullptr;
+        // }
     };
 
     struct _retain{
@@ -215,7 +117,7 @@ namespace _alloc{
             return *this;
         }
         
-        void* allocate(std::size_t _block_size) _YXXX_NOEXCEPT{
+        void* allocate(stl::size_t _block_size) _YXXX_NOEXCEPT{
             _chunk::count_type _block_num = (
                 static_cast<char*>(_M_end) - static_cast<char*>(_M_begin))
                 / _block_size;
@@ -227,7 +129,7 @@ namespace _alloc{
                 + _block_num * _block_size;
             return _ptr;
         }
-        void refill(std::size_t _size) _YXXX_NOEXCEPT{
+        void refill(stl::size_t _size) _YXXX_NOEXCEPT{
             if(!empty()) return;
             void* _new = ::operator new(_size);
             _M_begin = _new;
@@ -240,7 +142,7 @@ namespace _alloc{
 
     class _chunks_array{
     public:
-        _chunks_array(std::size_t _block_size) _YXXX_NOEXCEPT{
+        _chunks_array(stl::size_t _block_size) _YXXX_NOEXCEPT{
             _M_block_size = _block_size;
             _M_begin = _M_end = _M_over = nullptr;
         }
@@ -282,7 +184,7 @@ namespace _alloc{
             return allocate(_retain);
         }
         // 在管理的chunks中分配内存
-        void extract(std::size_t _size, _retain& _retain)
+        void extract(stl::size_t _size, _retain& _retain)
         _YXXX_NOEXCEPT{}
         bool deallocate(void* _ptr) _YXXX_NOEXCEPT{
             if(nullptr == _ptr) return false;
@@ -299,9 +201,9 @@ namespace _alloc{
 
     private:
         void _expand() _YXXX_NOEXCEPT{
-            std::size_t _old_bytes = (_M_over - _M_begin)
+            stl::size_t _old_bytes = (_M_over - _M_begin)
                 * sizeof(_chunk);
-            std::size_t _new_bytes = (
+            stl::size_t _new_bytes = (
                 (_M_over - _M_begin) * 1.5 + 1)
                 * sizeof(_chunk);
             char* _new_chunk = static_cast<char*>(::operator new(_new_bytes));
@@ -329,7 +231,7 @@ namespace _alloc{
             }
         }
 
-        std::size_t _M_block_size;
+        stl::size_t _M_block_size;
         _chunk* _M_begin;
         _chunk* _M_end;
         _chunk* _M_over;
@@ -342,7 +244,7 @@ namespace _alloc{
     };
 
     static inline _YXXX_CONSTEXPR
-    std::size_t align_up(std::size_t _size, std::size_t _align){
+    stl::size_t align_up(stl::size_t _size, stl::size_t _align){
         return (_size + _align - 1) & ~(_align - 1);
     }
 
@@ -351,7 +253,7 @@ namespace _alloc{
     class _pool_allocator_base{
     public:
         typedef _Tp             value_type;
-        typedef std::size_t     size_type;
+        typedef stl::size_t     size_type;
         typedef std::ptrdiff_t  difference_type;
 
         typedef _Tp*            pointer;
@@ -359,7 +261,7 @@ namespace _alloc{
         typedef _Tp&            reference;
         typedef const _Tp&      const_reference;
 
-        static _YXXX_CONSTEXPR std::size_t block_size =
+        static _YXXX_CONSTEXPR stl::size_t block_size =
             sizeof(value_type) < sizeof(_chunk::count_type) ? 
             sizeof(_chunk::count_type) : sizeof(value_type);
 
@@ -369,7 +271,7 @@ namespace _alloc{
                 ::operator new(sizeof(_chunks_array) * _array_num))){
             for(int _i = 0; _i < _array_num; ++_i){
                 new (_M_pool + _i) _chunks_array{
-                    std::size_t((_i + 1) * _min_block_bytes)
+                    stl::size_t((_i + 1) * _min_block_bytes)
                 };
             }
         }
@@ -442,7 +344,7 @@ namespace _alloc{
         }
         void _fragment_manager() _YXXX_NOEXCEPT{
             if(_M_retain.empty()) return;
-            std::size_t _bytes =
+            stl::size_t _bytes =
                 static_cast<char*>(_M_retain._M_end)
                 - static_cast<char*>(_M_retain._M_begin);
             size_type _index = _bytes/_min_block_bytes;
@@ -456,37 +358,14 @@ namespace _alloc{
         _retain _M_retain;
         _chunks_array* _M_pool;
     };
+};
 
-    // 无效分配器
-    template <typename _Tp>
-    class _pool_allocator_base<const _Tp>{
-    public:
-        typedef _Tp             value_type;
-        _pool_allocator_base()=delete;
-    };
-    template <typename _Tp>
-    class _pool_allocator_base<volatile _Tp>{
-    public:
-        typedef _Tp             value_type;
-        _pool_allocator_base()=delete;
-    };
-    template <typename _Tp>
-    class _pool_allocator_base<const volatile _Tp>{
-    public:
-        typedef _Tp             value_type;
-        _pool_allocator_base()=delete;
-    };
-    template <>
-    class _pool_allocator_base<void>{
-    public:
-        typedef void     value_type;
-        _pool_allocator_base()=delete;
-    };
-
+namespace _alloc{
     template <typename _Tp>
     class pool_allocator{
+    protected:
+        typedef _pool_alloc::_pool_allocator_base<_Tp>  _allocator;
     public:
-        typedef _pool_allocator_base<_Tp> _allocator;
         typedef typename _allocator::value_type         value_type;
         typedef typename _allocator::size_type          size_type;
         typedef typename _allocator::difference_type    difference_type;
@@ -495,19 +374,45 @@ namespace _alloc{
         typedef typename _allocator::reference          reference;
         typedef typename _allocator::const_reference    const_reference;
         
+    #if __cplusplus >= 201103L
+    protected:
+        std::shared_ptr<_allocator> _M_allocator;
+    public:
         pool_allocator() _YXXX_NOEXCEPT:
             _M_allocator(std::make_shared<_allocator>()){}
         template <typename _Up>
         pool_allocator(const pool_allocator<_Up>& other)
-            _YXXX_NOEXCEPT: _M_allocator(other._M_allocator){}
-        
+        _YXXX_NOEXCEPT: _M_allocator(other._M_allocator){}
+        ~pool_allocator() _YXXX_NOEXCEPT = default;
+    #else
+    protected:
+        _allocator* _M_allocator;
+        static stl::size_t _M_pool_alloc_countor;
+    public:
+        pool_allocator() _YXXX_NOEXCEPT:
+            _M_allocator(new _allocator{}){
+            ++_M_pool_alloc_countor;
+        }
+        template <typename _Up>
+        pool_allocator(const pool_allocator<_Up>& other)
+        _YXXX_NOEXCEPT: _M_allocator(other._M_allocator){
+            ++_M_pool_alloc_countor;
+        }
+        ~pool_allcator() _YXXX_NOEXCEPT{
+            --_M_pool_alloc_countor;
+            if(0 == _M_pool_alloc_countor)
+                delete _M_allocator;
+            _M_allocator = nullptr;
+        }
+    #endif
+
         pointer allocate(size_type _size) _YXXX_NOEXCEPT{
             return _M_allocator->allocate(_size);
         }
         bool deallocate(pointer _ptr) _YXXX_NOEXCEPT{
             _M_allocator->deallocate(_ptr);
         }
-        
+
         void construct(pointer _ptr){
             new ((void*)_ptr) value_type();
         }
@@ -522,24 +427,50 @@ namespace _alloc{
             _ptr->~value_type();
         }
 
-        pool_allocator& operator=(const pool_allocator& other)
+        pool_allocator&
+        operator=(const pool_allocator& other)
         _YXXX_NOEXCEPT{
             _M_allocator = other._M_allocator;
             return *this;
         }
-        friend bool operator==(
-            const pool_allocator& lhs, const pool_allocator& rhs)
-        _YXXX_NOEXCEPT{
+        friend bool
+        operator==(const pool_allocator& lhs,
+            const pool_allocator& rhs) _YXXX_NOEXCEPT{
             return lhs._M_allocator == rhs._M_allocator;
         }
-        friend bool operator!=(
-            const pool_allocator& lhs, const pool_allocator& rhs)
-        _YXXX_NOEXCEPT{
+        friend bool
+        operator!=(const pool_allocator& lhs,
+            const pool_allocator& rhs) _YXXX_NOEXCEPT{
             return !(lhs == rhs);
         }
-    protected:
-        std::shared_ptr<_allocator> _M_allocator;
+    };
+
+    // 无效分配器
+    template <typename _Tp>
+    class pool_allocator<const _Tp>{
+    public:
+        typedef _Tp             value_type;
+        pool_allocator()=delete;
+    };
+    template <typename _Tp>
+    class pool_allocator<volatile _Tp>{
+    public:
+        typedef _Tp             value_type;
+        pool_allocator()=delete;
+    };
+    template <typename _Tp>
+    class pool_allocator<const volatile _Tp>{
+    public:
+        typedef _Tp             value_type;
+        pool_allocator()=delete;
+    };
+    template <>
+    class pool_allocator<void>{
+    public:
+        typedef void     value_type;
+        pool_allocator()=delete;
     };
 };
+
 
 #endif

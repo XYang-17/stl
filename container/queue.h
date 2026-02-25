@@ -1,7 +1,7 @@
 #ifndef _YXXX_QUEUE_H_
 #define _YXXX_QUEUE_H_
 
-#include "deque.h"
+#include "./deque.h"
 
 namespace stl{
     template <typename _Type, typename _Alloc = _alloc::allocator<_Type>,

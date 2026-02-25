@@ -1,6 +1,8 @@
 #ifndef _YXXX_HASHTABLE_H_
 #define _YXXX_HASHTABLE_H_
 
+#include <bits/stl_pair.h>
+#include <stdexcept>
 #include "_container_base.h"
 #include "../function.h"
 
@@ -15,10 +17,10 @@ namespace _hash{
     struct _hash_node_code_cache{};
     template <>
     struct _hash_node_code_cache<true>{
-        std::size_t& hash_code() _YXXX_NOEXCEPT{return _M_hash_code;}
-        const std::size_t& hash_code() const _YXXX_NOEXCEPT{return _M_hash_code;}
+        stl::size_t& hash_code() _YXXX_NOEXCEPT{return _M_hash_code;}
+        const stl::size_t& hash_code() const _YXXX_NOEXCEPT{return _M_hash_code;}
     protected:
-        std::size_t _M_hash_code;
+        stl::size_t _M_hash_code;
     };
     template <typename _ValueType, bool _Cache>
     struct _hash_node:
@@ -55,9 +57,9 @@ namespace _hash{
         using hasher              = _Hash;
         using key_type            = _KeyType;
         using value_type          = _ValueType;
-        using hash_code           = std::size_t;
+        using hash_code           = stl::size_t;
         
-        using size_type           = std::size_t;
+        using size_type           = stl::size_t;
         using difference_type     = std::ptrdiff_t;
 
         _hash_code_base() _YXXX_NOEXCEPT = default;
@@ -202,15 +204,15 @@ namespace _hash{
     
         float max_load_factor() const _YXXX_NOEXCEPT{return _M_max_load_factor;}
         void max_load_factor(float _f) _YXXX_NOEXCEPT{_M_max_load_factor = _f;}
-        std::size_t first_bucket_count(std::size_t _n) const _YXXX_NOEXCEPT{
+        stl::size_t first_bucket_count(stl::size_t _n) const _YXXX_NOEXCEPT{
             return stl::min_prime(_n);
         }
-        std::size_t bucket_for_n(std::size_t _n) const _YXXX_NOEXCEPT{
+        stl::size_t bucket_for_n(stl::size_t _n) const _YXXX_NOEXCEPT{
             if(_n <= 2) return _n + 1;
             return first_bucket_count(_n / double(_M_max_load_factor));
         }
-        std::size_t need_rehash(
-            std::size_t _n, std::size_t _bkt_n) const _YXXX_NOEXCEPT{
+        stl::size_t need_rehash(
+            stl::size_t _n, stl::size_t _bkt_n) const _YXXX_NOEXCEPT{
             return (_n / _bkt_n < _M_max_load_factor) ?
                 0 : first_bucket_count(_bkt_n + 1);
         }
@@ -300,13 +302,13 @@ namespace _hash{
             return _res;
         }
 
-        void _M_reset_buckets(bucket_pointer _bkt, std::size_t _n)_YXXX_NOEXCEPT{
-            for(std::size_t _i = 0; _i < _n; ++_i){
+        void _M_reset_buckets(bucket_pointer _bkt, stl::size_t _n)_YXXX_NOEXCEPT{
+            for(stl::size_t _i = 0; _i < _n; ++_i){
                 _M_deallocate_nodes(node_pointer(_bkt[_i].next));
                 _bkt[_i].next = nullptr;
             }
         }
-        bucket_pointer _M_allocate_buckets(std::size_t _bkt_count){
+        bucket_pointer _M_allocate_buckets(stl::size_t _bkt_count){
             bucket_alloc_type _alloc(_M_node_allocator());
             bucket_pointer _bkt = _alloc.allocate(_bkt_count);
             for(bucket_pointer _cur = _bkt; _cur < _bkt + _bkt_count; ++_cur)
@@ -867,7 +869,7 @@ namespace _hash{
     operator[](const key_type& _key){
         _hashtable* _this = static_cast<_hashtable*>(this);
         hash_code _code = _this->_M_hash_code(_key);
-        std::size_t _bkt_index = _this->_M_bucket_index(_code, _this->_M_bucket_count);
+        stl::size_t _bkt_index = _this->_M_bucket_index(_code, _this->_M_bucket_count);
         if(auto _node_ptr = _this->_M_find(_key, _code, _bkt_index))
             return _node_ptr->value().second;
         
@@ -888,7 +890,7 @@ namespace _hash{
     operator[](key_type&& _key){
         _hashtable* _this = static_cast<_hashtable*>(this);
         hash_code _code = _this->_M_hash_code(_key);
-        std::size_t _bkt_index = _this->_M_bucket_index(_code, _this->_M_bucket_count);
+        stl::size_t _bkt_index = _this->_M_bucket_index(_code, _this->_M_bucket_count);
         if(auto _node_ptr = _this->_M_find(_key, _code, _bkt_index))
             return _node_ptr->value().second;
             

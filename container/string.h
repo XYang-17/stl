@@ -1,7 +1,8 @@
 #ifndef _YXXX_STRING_H_
 #define _YXXX_STRING_H_
 
-#include "_container_base.h"
+#include <memory>
+#include "./_container_base.h"
 
 namespace _char_traits{
     template <typename _CharType>
@@ -19,8 +20,8 @@ namespace _char_traits{
             _c1 = _c2;
         }
         static _YXXX_CONSTEXPR void
-        assign(char_type* _s, std::size_t _n, const char_type& _c){
-            for(std::size_t _i = 0; _i < _n; ++_i)
+        assign(char_type* _s, stl::size_t _n, const char_type& _c){
+            for(stl::size_t _i = 0; _i < _n; ++_i)
                 _s[_i] = _c;
         }
         static _YXXX_CONSTEXPR bool
@@ -36,34 +37,34 @@ namespace _char_traits{
             return _c1 < _c2;
         }
         static _YXXX_CONSTEXPR int
-        compare(const char_type* _s1, const char_type* _s2, std::size_t _n){
+        compare(const char_type* _s1, const char_type* _s2, stl::size_t _n){
             for(int _i = 0; _i < _n; ++_i){
                 if(lt(_s1[_i], _s2[_i])) return -1;
                 else if(lt(_s2[_i], _s1[_i])) return 1;
             }
             return 0;
         }
-        static _YXXX_CONSTEXPR std::size_t
+        static _YXXX_CONSTEXPR stl::size_t
         length(const char_type* _s){
             char_type null_char{};
-            std::size_t _l = 0;
+            stl::size_t _l = 0;
             while(!eq(_s[_l], null_char))
                 ++_l;
             return _l;
         }
         static _YXXX_CONSTEXPR const char_type*
-        find(const char_type* _s, std::size_t _n, const char_type& _t){
-            for(std::size_t _i = 0; _i < _n; ++_i)
+        find(const char_type* _s, stl::size_t _n, const char_type& _t){
+            for(stl::size_t _i = 0; _i < _n; ++_i)
                 if(eq(_s[_i], _t)) return _s + _i;
             return 0;
         }
         static _YXXX_CONSTEXPR char_type* 
-        copy(char_type* _s1, const char_type* _s2, std::size_t _n){
+        copy(char_type* _s1, const char_type* _s2, stl::size_t _n){
             if(_n) memcpy(_s1, _s2, _n * sizeof(char_type));
             return _s1;
         }
         static _YXXX_CONSTEXPR char_type*
-        move(char_type* _s1, const char_type* _s2, std::size_t _n){
+        move(char_type* _s1, const char_type* _s2, stl::size_t _n){
             if(_n) memmove(_s1, _s2, _n * sizeof(char_type));
             return _s1;
         }
@@ -87,9 +88,9 @@ namespace _char_traits{
             _c1 = _c2;
         }
         static _YXXX_CONSTEXPR void
-        assign(char_type* _s, std::size_t _n, const char_type& _c)
+        assign(char_type* _s, stl::size_t _n, const char_type& _c)
         _YXXX_NOEXCEPT{
-            for(std::size_t _i = 0; _i < _n; ++_i)
+            for(stl::size_t _i = 0; _i < _n; ++_i)
                 _s[_i] = _c;
         }
         static _YXXX_CONSTEXPR bool
@@ -109,7 +110,7 @@ namespace _char_traits{
                 < static_cast<unsigned char>(_c2);
         }
         static _YXXX_CONSTEXPR int
-        compare(const char_type* _s1, const char_type* _s2, std::size_t _n)
+        compare(const char_type* _s1, const char_type* _s2, stl::size_t _n)
         _YXXX_NOEXCEPT{
             for(int _i = 0; _i < _n; ++_i){
                 if(lt(_s1[_i], _s2[_i])) return -1;
@@ -117,29 +118,29 @@ namespace _char_traits{
             }
             return 0;
         }
-        static _YXXX_CONSTEXPR std::size_t
+        static _YXXX_CONSTEXPR stl::size_t
         length(const char_type* _s) _YXXX_NOEXCEPT{
             char_type null_char{};
-            std::size_t _l = 0;
+            stl::size_t _l = 0;
             while(!eq(_s[_l], null_char))
                 ++_l;
             return _l;
         }
         static _YXXX_CONSTEXPR const char_type*
-        find(const char_type* _s, std::size_t _n, const char_type& _t)
+        find(const char_type* _s, stl::size_t _n, const char_type& _t)
         _YXXX_NOEXCEPT{
-            for(std::size_t _i = 0; _i < _n; ++_i)
+            for(stl::size_t _i = 0; _i < _n; ++_i)
                 if(eq(_s[_i], _t)) return _s + _i;
             return 0;
         }
         static _YXXX_CONSTEXPR char_type* 
-        copy(char_type* _s1, const char_type* _s2, std::size_t _n)
+        copy(char_type* _s1, const char_type* _s2, stl::size_t _n)
         _YXXX_NOEXCEPT{
             if(_n) memcpy(_s1, _s2, _n * sizeof(char_type));
             return _s1;
         }
         static _YXXX_CONSTEXPR char_type*
-        move(char_type* _s1, const char_type* _s2, std::size_t _n)
+        move(char_type* _s1, const char_type* _s2, stl::size_t _n)
         _YXXX_NOEXCEPT{
             if(_n) memmove(_s1, _s2, _n * sizeof(char_type));
             return _s1;
@@ -165,8 +166,8 @@ namespace _char_traits{
             _c1 = _c2;
         }
         static _YXXX_CONSTEXPR void
-        assign(char_type* _s, std::size_t _n, const char_type& _c){
-            for(std::size_t _i = 0; _i < _n; ++_i)
+        assign(char_type* _s, stl::size_t _n, const char_type& _c){
+            for(stl::size_t _i = 0; _i < _n; ++_i)
                 _s[_i] = _c;
         }
         static _YXXX_CONSTEXPR bool
@@ -182,34 +183,34 @@ namespace _char_traits{
             return _c1 < _c2;
         }
         static _YXXX_CONSTEXPR int
-        compare(const char_type* _s1, const char_type* _s2, std::size_t _n){
+        compare(const char_type* _s1, const char_type* _s2, stl::size_t _n){
             for(int _i = 0; _i < _n; ++_i){
                 if(lt(_s1[_i], _s2[_i])) return -1;
                 else if(lt(_s2[_i], _s1[_i])) return 1;
             }
             return 0;
         }
-        static _YXXX_CONSTEXPR std::size_t
+        static _YXXX_CONSTEXPR stl::size_t
         length(const char_type* _s){
             char_type null_char{};
-            std::size_t _l = 0;
+            stl::size_t _l = 0;
             while(!eq(_s[_l], null_char))
                 ++_l;
             return _l;
         }
         static _YXXX_CONSTEXPR const char_type*
-        find(const char_type* _s, std::size_t _n, const char_type& _t){
-            for(std::size_t _i = 0; _i < _n; ++_i)
+        find(const char_type* _s, stl::size_t _n, const char_type& _t){
+            for(stl::size_t _i = 0; _i < _n; ++_i)
                 if(eq(_s[_i], _t)) return _s + _i;
             return 0;
         }
         static _YXXX_CONSTEXPR char_type* 
-        copy(char_type* _s1, const char_type* _s2, std::size_t _n){
+        copy(char_type* _s1, const char_type* _s2, stl::size_t _n){
             if(_n) memcpy(_s1, _s2, _n * sizeof(char_type));
             return _s1;
         }
         static _YXXX_CONSTEXPR char_type*
-        move(char_type* _s1, const char_type* _s2, std::size_t _n){
+        move(char_type* _s1, const char_type* _s2, stl::size_t _n){
             if(_n) memmove(_s1, _s2, _n * sizeof(char_type));
             return _s1;
         }

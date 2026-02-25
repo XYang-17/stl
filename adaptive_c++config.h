@@ -47,5 +47,16 @@
     #define _YXXX_USE_WCHAR_T 1
 #endif
 
+namespace stl{
+    #ifdef _GLIBCXX_CXX_CONFIG_H
+    using size_t    = std::size_t;
+    using ptrdiff_t = std::ptrdiff_t;
+    #else
+    #include <stddef.h>
+    using size_t    = __SIZE_TYPE__;
+    using ptrdiff_t = __PTRDIFF_TYPE__;
+    #endif
+};
+
 #endif
 

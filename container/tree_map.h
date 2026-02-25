@@ -1,13 +1,14 @@
 #ifndef _YXXX_TREE_MAP_H_
 #define _YXXX_TREE_MAP_H_
 
-#include "tree/rb_tree.h"
+#include <bits/stl_pair.h>
+#include "./tree/rb_tree.h"
 #include "../function.h"
 
 namespace stl{
     template<typename _KeyType, typename _ValueType,
         typename _ExtractKey = stl::_first_arg,
-        typename _KeyComp = std::less<_KeyType>,
+        typename _KeyComp = stl::less_than<_KeyType>,
         typename _Alloc = _alloc::allocator<
             std::pair<const _KeyType, _ValueType>>>
     class tree_map{
@@ -179,7 +180,7 @@ namespace stl{
     };
     template<typename _KeyType, typename _ValueType,
         typename _ExtractKey = stl::_first_arg,
-        typename _KeyComp = std::less<_KeyType>,
+        typename _KeyComp = stl::less_than<_KeyType>,
         typename _Alloc = _alloc::allocator<
             std::pair<const _KeyType, _ValueType>>>
     class tree_multimap{

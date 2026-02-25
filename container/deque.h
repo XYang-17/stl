@@ -1,7 +1,7 @@
 #ifndef _YXXX_DEQUE_H_
 #define _YXXX_DEQUE_H_
 
-#include "_container_base.h"
+#include "./_container_base.h"
 
 namespace stl{
     namespace _deque{
@@ -9,10 +9,10 @@ namespace stl{
         #define _DEQUE_BLOCK_SIZE 64
         #endif
 
-        _YXXX_CONSTEXPR inline std::size_t _deque_block_size(std::size_t _size) _YXXX_NOEXCEPT{
+        _YXXX_CONSTEXPR inline stl::size_t _deque_block_size(stl::size_t _size) _YXXX_NOEXCEPT{
             return (_size < _DEQUE_BLOCK_SIZE ?
-                std::size_t(_DEQUE_BLOCK_SIZE / _size) :
-                std::size_t(1));
+                stl::size_t(_DEQUE_BLOCK_SIZE / _size) :
+                stl::size_t(1));
         }
 
         template <typename _Type, typename _Reference, typename _Pointer>
@@ -31,7 +31,7 @@ namespace stl{
             typedef _deque_iterator   self_type;
 
         private:
-            _YXXX_CONSTEXPR inline std::size_t _M_block_size() _YXXX_NOEXCEPT{
+            _YXXX_CONSTEXPR inline stl::size_t _M_block_size() _YXXX_NOEXCEPT{
                 return _deque_block_size(sizeof(_Type));
             }
             inline void _set_block(_map_pointer _new_block){

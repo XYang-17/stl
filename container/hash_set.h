@@ -1,7 +1,8 @@
 #ifndef _YXXX_HASH_SET_H_
 #define _YXXX_HASH_SET_H_
 
-#include "hashtable.h"
+#include <bits/functional_hash.h>
+#include "./hashtable.h"
 
 namespace stl{
     template <bool _UniqueKey>
@@ -11,7 +12,7 @@ namespace stl{
         typename _Hash = std::hash<_ValueType>,
         typename _Equal = stl::equal_to<_ValueType>,
         typename _ExtractKey = stl::_self,
-        typename _TruncateHash = stl::modulus<std::size_t>,
+        typename _TruncateHash = stl::modulus<stl::size_t>,
         typename _Rehash = _hash::_prime_rehash,
         typename _Traits = _set_traits<true>,
         typename _Alloc = _alloc::allocator<_ValueType>>
@@ -133,7 +134,7 @@ namespace stl{
         typename _Hash = std::hash<_ValueType>,
         typename _Equal = stl::equal_to<_ValueType>,
         typename _ExtractKey = stl::_self,
-        typename _TruncateHash = stl::modulus<std::size_t>,
+        typename _TruncateHash = stl::modulus<stl::size_t>,
         typename _Rehash = _hash::_prime_rehash,
         typename _Traits = _set_traits<false>,
         typename _Alloc = _alloc::allocator<_ValueType>>

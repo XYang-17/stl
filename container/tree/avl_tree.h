@@ -1,7 +1,7 @@
 #ifndef _YXXX_AVL_TREE_H_
 #define _YXXX_AVL_TREE_H_
 
-#include "tree_base.h"
+#include "./tree_base.h"
 #include "../../iterator.h"
 
 namespace _tree{
@@ -15,14 +15,14 @@ namespace _tree{
     public:
         _node_height_base() _YXXX_NOEXCEPT: _M_height(0){}
 
-        std::size_t height() const _YXXX_NOEXCEPT{
+        stl::size_t height() const _YXXX_NOEXCEPT{
             if(nullptr == _node_pointer(this)) return 0;
             return _M_height;
         }
         void update_height() _YXXX_NOEXCEPT{
             if(nullptr == _node_pointer(this)) return;
             _node_pointer _this = static_cast<_node_pointer>(this);
-            std::size_t _h = 1 + std::max(
+            stl::size_t _h = 1 + std::max(
                 _node_pointer(_this->_M_left)->height(),
                 _node_pointer(_this->_M_right)->height());
             if(_h == _M_height) return;
@@ -30,7 +30,7 @@ namespace _tree{
             _node_pointer(_this->_M_prev)->update_height();
         }
     protected:
-        std::size_t _M_height;
+        stl::size_t _M_height;
     };
     
     template <typename _Type>
@@ -75,13 +75,13 @@ namespace _tree{
             self_pointer(this->_M_right)->prev(this);
         }
 
-        bool right_overload(std::size_t _th) const _YXXX_NOEXCEPT{
+        bool right_overload(stl::size_t _th) const _YXXX_NOEXCEPT{
             return this ?
                 self_pointer(this->_M_right)->height()
                     > (_th + self_pointer(this->_M_left)->height()) :
                 false;
         }
-        bool left_overload(std::size_t _th) const _YXXX_NOEXCEPT{
+        bool left_overload(stl::size_t _th) const _YXXX_NOEXCEPT{
             return this ?
                 self_pointer(this->_M_left)->height()
                     > (_th + self_pointer(this->_M_right)->height()) :
@@ -143,7 +143,7 @@ namespace _tree{
         typedef _Comp            key_compare;
         typedef _Alloc           allocator_type;
 
-        using size_type      = std::size_t;
+        using size_type      = stl::size_t;
     protected:
         using _node_type     = _Avl_tree_node<value_type>;
         using _node_pointer  = _node_type*;
