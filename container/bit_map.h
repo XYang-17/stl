@@ -18,7 +18,7 @@ namespace stl{
             reset();
         }
         ~bit_map() _YXXX_NOEXCEPT{
-            _M_allocator.deallocate(_M_map);
+            _M_allocator.deallocate(_M_map, _Size);
         }
 
         bool operator[](stl::size_t _pos){

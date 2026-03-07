@@ -233,7 +233,7 @@ namespace _tree{
         void _M_destroy_node(_node_pointer _ptr) _YXXX_NOEXCEPT{
             _node_alloc _alloc = _node_alloc(_M_allocator);
             _alloc.destroy(_ptr);
-            _alloc.deallocate(_ptr);
+            _alloc.deallocate(_ptr, sizeof(_NodeType));
         }
     protected:
         allocator_type _M_allocator;

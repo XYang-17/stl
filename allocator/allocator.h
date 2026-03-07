@@ -35,6 +35,8 @@ namespace _alloc{
         typedef _Tp&            reference;
         typedef const _Tp&      const_reference;
 
+        static const_pointer zero_bytes = ::operator new (0);
+
         allocator() _YXXX_NOEXCEPT = default;
         template <typename _Up>
         allocator(const allocator<_Up>&) _YXXX_NOEXCEPT{}
@@ -42,17 +44,35 @@ namespace _alloc{
         allocator& operator=(const allocator&)
         _YXXX_NOEXCEPT{return *this;}
 
+        /* 分配_size个连续的value_type的内存空间 */
         pointer allocate(size_type _size){
+            if(0 == _size)  return zero_bytes;
             // ...bad_alloc...
             // ...align...
             return static_cast<pointer>(
                 ::operator new(sizeof(value_type) * _size)
             );
         }
-        void deallocate(value_type* _ptr){
+        /* 收回_ptr指向的内存块，_size指示该内存块的大小 */
+        void deallocate(value_type* _ptr, size_type = 0){
+            if(zero_bytes == _ptr) return;
             ::operator delete(_ptr);
         }
+
+        _YXXX_CONSTEXPR bool
+        expandable(pointer _ptr, size_type _size){
+            return false;
+        }
+        /* 扩充_ptr指向的内存块，_size指示原有内存块的大小 */
+        pointer expand(pointer _ptr, size_type _size){
+            if(zero_bytes == _ptr) return zero_bytes;
+            pointer _rtn = ::operator new(_size * 2);
+            memmove(_rtn, _ptr, sizeof(value_type) * _size);
+            ::operator delete _ptr;
+            return _rtn;
+        }
         
+        /* 在_ptr指向的地址构造value_type对象 */
         void construct(pointer _ptr){
             new ((void*)_ptr) value_type();
         }
@@ -62,7 +82,9 @@ namespace _alloc{
                 std::forward<Args>(_args)...
             );
         }
+        /* 销毁_ptr指向的地址的value_type对象 */
         void destroy(pointer _ptr){
+            if(zero_bytes == _ptr) return;
             _ptr->~value_type();
         }
     };

@@ -170,7 +170,7 @@ namespace stl{
         }
         ~list(){
             clear();
-            _M_allocator.deallocate(_M_head);
+            _M_allocator.deallocate(_M_head, sizeof(_node_type));
             _M_head = nullptr;
         }
 
@@ -269,7 +269,7 @@ namespace stl{
     private:
         void _M_move(self_type& _l) _YXXX_NOEXCEPT{
             clear();
-            _M_allocator.deallocate(_M_head);
+            _M_allocator.deallocate(_M_head, sizeof(_node_type));
             _M_head = _l._M_head;
             _l._M_head = nullptr;
             _M_allocator = std::move(_l._M_allocator);
@@ -312,7 +312,7 @@ namespace stl{
             _node->prev()->next() = _node->next();
             _node->next()->prev() = _node->prev();
             _M_allocator.destroy(_node);
-            _M_allocator.deallocate(_node);
+            _M_allocator.deallocate(_node, sizeof(_node_type));
         }
 
     protected:

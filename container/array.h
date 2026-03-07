@@ -50,7 +50,7 @@ namespace stl{
             _M_copy_or_assign(_begin, _end);
         }
         ~array() _YXXX_NOEXCEPT{
-            _M_allocator.deallocate(_M_begin);
+            _M_allocator.deallocate(_M_begin, sizeof(value_type) * _M_capacity);
             _M_begin = nullptr;
         }
 
@@ -74,7 +74,7 @@ namespace stl{
         array& operator=(array&& _array)
         _YXXX_NOEXCEPT{
             if(&_array == this) return *this;
-            _M_allocator.deallocate(_M_begin);
+            _M_allocator.deallocate(_M_begin, sizeof(value_type) * _M_capacity);
             _M_move(_array);
             return *this;
         }
@@ -218,7 +218,7 @@ namespace stl{
             _array._M_after_move();
         }
         void _M_before_move() _YXXX_NOEXCEPT{
-            _M_allocator.deallocate(_M_begin);
+            _M_allocator.deallocate(_M_begin, sizeof(value_type) * _M_capacity);
             _M_begin = nullptr;
         }
         void _M_after_move() _YXXX_NOEXCEPT{
@@ -263,7 +263,7 @@ namespace stl{
             size_type new_capacity = _M_capacity * 1.5 + 1;
             pointer new_value = _M_allocator.allocate(new_capacity);
             memmove(new_value, _M_begin, _M_capacity * sizeof(value_type));
-            _M_allocator.deallocate(_M_begin);
+            _M_allocator.deallocate(_M_begin, sizeof(value_type) * _M_capacity);
              _M_begin = new_value;
             _M_capacity = new_capacity;
         }

@@ -6,13 +6,20 @@
 namespace stl{
     namespace _deque{
         #ifndef _DEQUE_BLOCK_SIZE
-        #define _DEQUE_BLOCK_SIZE 64
+        #define _DEQUE_BLOCK_SIZE 256
         #endif
 
-        _YXXX_CONSTEXPR inline stl::size_t _deque_block_size(stl::size_t _size) _YXXX_NOEXCEPT{
-            return (_size < _DEQUE_BLOCK_SIZE ?
-                stl::size_t(_DEQUE_BLOCK_SIZE / _size) :
+        _YXXX_CONSTEXPR inline stl::size_t
+        _deque_block_size(stl::size_t _bytes) _YXXX_NOEXCEPT{
+            return (_bytes < _DEQUE_BLOCK_SIZE ?
+                stl::size_t(_DEQUE_BLOCK_SIZE / _bytes) :
                 stl::size_t(1));
+        }
+        _YXXX_CONSTEXPR inline stl::size_t
+        _deque_block_bytes(stl::size_t _bytes) _YXXX_NOEXCEPT{
+            return (_bytes < _DEQUE_BLOCK_SIZE ?
+                stl::size_t(_DEQUE_BLOCK_SIZE - _DEQUE_BLOCK_SIZE % _bytes) :
+                _bytes);
         }
 
         template <typename _Type, typename _Reference, typename _Pointer>
@@ -222,10 +229,10 @@ namespace stl{
         }
         ~deque() _YXXX_NOEXCEPT{
             for(_map_pointer _map_ptr = _M_start; _map_ptr != _M_over; ++_map_ptr){
-                _M_allocator.deallocate(*_map_ptr);
+                _M_allocator.deallocate(*_map_ptr, _M_block_bytes());
                 *_map_ptr = nullptr;
             }
-            _map_alloc(_M_allocator).deallocate(_M_map);
+            _map_alloc(_M_allocator).deallocate(_M_map, sizeof(_M_map) * _M_map_capacity);
             _M_map_capacity = 0;
             _M_map = _M_start = _M_over = nullptr;
             _M_begin = _M_end = nullptr;
@@ -350,8 +357,13 @@ namespace stl{
         //     return os;
         // }
     private:
-        inline _YXXX_CONSTEXPR size_type _M_block_size() const _YXXX_NOEXCEPT{
+        inline _YXXX_CONSTEXPR size_type
+        _M_block_size() const _YXXX_NOEXCEPT{
             return _deque::_deque_block_size(sizeof(value_type));
+        }
+        inline _YXXX_CONSTEXPR stl::size_t
+        _M_block_bytes() const _YXXX_NOEXCEPT{
+            return _deque::_deque_block_bytes(sizeof(value_type));
         }
 
         void _M_init(size_type _capacity, const allocator_type& _alloc) _YXXX_NOEXCEPT{
@@ -382,9 +394,9 @@ namespace stl{
             _M_begin = _M_end = nullptr;
             _M_start = _M_over = nullptr;
             for(_map_pointer _map_ptr = _M_map; _map_ptr < _M_map + _M_map_capacity; ++_map_ptr){
-                _M_allocator.deallocate(*_map_ptr);
+                _M_allocator.deallocate(*_map_ptr, _M_block_bytes());
             }
-            _map_alloc(_M_allocator).deallocate(_M_map);
+            _map_alloc(_M_allocator).deallocate(_M_map, sizeof(_M_map) * _M_map_capacity);
             _M_map = nullptr;
         }
         void _M_after_move() _YXXX_NOEXCEPT{
@@ -450,7 +462,7 @@ namespace stl{
 
             _M_start = _tmp + (_M_start - _M_map);
             _M_over = _tmp + (_M_over - _M_map);
-            _map_alloc(_M_allocator).deallocate(_M_map);
+            _map_alloc(_M_allocator).deallocate(_M_map, sizeof(_M_map) * _M_map_capacity);
             _M_map = _new_map;
             _M_map_capacity = _new_map_capacity;
         }
@@ -461,7 +473,7 @@ namespace stl{
 
             _M_start = _new_map + (_M_start - _M_map);
             _M_over = _new_map + (_M_over - _M_map);
-            _map_alloc(_M_allocator).deallocate(_M_map);
+            _map_alloc(_M_allocator).deallocate(_M_map, sizeof(_M_map) * _M_map_capacity);
 
             for(_map_pointer _map_iter = _new_map + _M_map_capacity;
                     _map_iter < _new_map + _new_map_capacity; ++_map_iter){

@@ -261,6 +261,8 @@ std::runtime_error("Bytes of chunk is insufficient to accommodate at least one 4
         typedef _Tp&            reference;
         typedef const _Tp&      const_reference;
 
+        static const_pointer zero_bytes = ::operator new(0);
+
         static _YXXX_CONSTEXPR stl::size_t block_size =
             sizeof(value_type) < sizeof(_chunk::count_type) ? 
             sizeof(_chunk::count_type) : sizeof(value_type);
@@ -318,13 +320,22 @@ std::runtime_error("Bytes of chunk is insufficient to accommodate at least one 4
             if(_M_retain.empty()) throw std::bad_alloc();
             return static_cast<pointer>(_M_pool[_index].allocate(_M_retain));
         }
-        bool deallocate(void* _ptr){
+        bool deallocate(pointer _ptr, size_type _size = sizeof(value_type)){
             if(nullptr == _ptr) return false;
             for(size_type _index = 0; _index < _array_num; ++_index){
                 if(_M_pool[_index].deallocate(_ptr))
                     return true;
             }
             return false;
+        }
+
+        _YXXX_CONSTEXPR bool
+        expandable(pointer _ptr, size_type _size){
+            
+        }
+        pointer expand(pointer _ptr, size_type _size){
+            if(zero_bytes == _ptr) return zero_bytes;
+            
         }
         
     private:
@@ -409,8 +420,9 @@ namespace _alloc{
         pointer allocate(size_type _size) _YXXX_NOEXCEPT{
             return _M_allocator->allocate(_size);
         }
-        bool deallocate(pointer _ptr) _YXXX_NOEXCEPT{
-            _M_allocator->deallocate(_ptr);
+        bool deallocate(pointer _ptr, size_type _size = sizeof(value_type))
+        _YXXX_NOEXCEPT{
+            _M_allocator->deallocate(_ptr, _size);
         }
 
         void construct(pointer _ptr){
@@ -470,6 +482,12 @@ namespace _alloc{
         typedef void     value_type;
         pool_allocator()=delete;
     };
+
+    #if __cplusplus >= 201103L
+    #else
+    template <typename _Tp>
+    stl::size_t pool_allocator<_Tp>::_M_pool_alloc_countor = 0;
+    #endif
 };
 
 

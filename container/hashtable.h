@@ -248,7 +248,7 @@ namespace _hash{
         }
         void _M_deallocate_node(node_pointer _node) _YXXX_NOEXCEPT{
             _M_node_alloc.destroy(_node);
-            _M_node_alloc.deallocate(_node);
+            _M_node_alloc.deallocate(_node, sizeof(node_type));
         }
         void _M_deallocate_nodes(node_pointer _node) _YXXX_NOEXCEPT{
             node_pointer _tmp = nullptr;
@@ -315,9 +315,9 @@ namespace _hash{
                 _alloc.construct(_cur);
             return _bkt;
         }
-        void _M_deallocate_buckets(bucket_pointer _bkt) _YXXX_NOEXCEPT{
+        void _M_deallocate_buckets(bucket_pointer _bkt, stl::size_t _count) _YXXX_NOEXCEPT{
             bucket_alloc_type _alloc(_M_node_allocator());
-            _alloc.deallocate(_bkt);
+            _alloc.deallocate(_bkt, _count);
         }
 
     protected:
@@ -480,7 +480,7 @@ namespace _hash{
             _hashtable(_il.size()){insert(_il.begin(), _il.end());}
         ~_hashtable() _YXXX_NOEXCEPT{
             clear();
-            this->_M_deallocate_buckets(_M_buckets);
+            this->_M_deallocate_buckets(_M_buckets, _M_bucket_count);
             _M_buckets = nullptr;
         }
 
@@ -693,7 +693,7 @@ namespace _hash{
         }
         void _M_before_move() _YXXX_NOEXCEPT{
             clear();
-            this->_M_deallocate_buckets();
+            this->_M_deallocate_buckets(_M_buckets, _M_bucket_count);
             _M_buckets = nullptr;
         }
         void _M_after_move() _YXXX_NOEXCEPT{
@@ -711,7 +711,7 @@ namespace _hash{
         void _M_copy_or_assign(const _hashtable& _ht){
             _M_rehash.max_load_factor(_ht._f);
             if(_M_bucket_count != _ht._M_bucket_count){
-                this->_M_deallocate_buckets(_M_buckets);
+                this->_M_deallocate_buckets(_M_buckets, _M_bucket_count);
                 _M_bucket_count = _ht._M_bucket_count;
                 _M_buckets = this->_M_allocate_buckets(_M_bucket_count);
             }

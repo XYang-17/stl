@@ -257,25 +257,228 @@ namespace stl{
         using const_reverse_iterator = typename
             _iterator::reverse_iterator<const_iterator>;
 
+        using self_type        = _string;
+
         static const size_type npos = static_cast<size_type>(-1);
 
-        _string(const alloctor_type& _alloc = alloctor_type{})
-        _YXXX_NOEXCEPT: _M_alloc(_alloc), _M_begin(nullptr), _M_size(0){}
-        _string(const char_type* _s, size_type _n = npos,
-            const alloctor_type& _alloc = alloctor_type{}):
-            _string(_alloc){}
-        _string(const _string& _str){}
-        _string(const _string& _str,
-            difference_type _begin = 0, size_type _n = npos){}
-        _string(_string&& _str){}
-        _string(std::initializer_list<char_type>&& _il){}
+        _string() _YXXX_NOEXCEPT:
+            _M_allocator(alloctor_type{}), _M_begin(nullptr),
+            _M_size(0), _M_capacity(0){}
+        _string(const char_type* _s, size_type _n = npos):
+            _string(){
+            _M_copy_or_assign(_s, _n);
+        }
+        _string(const _string& _str):
+            _string(){
+            _M_copy_or_assign(_str.begin(), _str.end());
+        }
+        _string(const _string& _str, difference_type _begin,
+            size_type _n = npos):
+            _string(){
+            if(_begin < _str._M_size){
+                if(npos == _n || _begin + _n >= _str._M_size)
+                    _M_copy_or_assign(_str.begin()+_begin, _str.end());
+                else
+                    _M_copy_or_assign(_str.begin()+_begin,
+                        _str.begin()+_begin+_n);
+            }
+        }
+        _string(_string&& _str):
+            _string(){
+            _M_move_or_assign(_str.begin(), _str.end());
+        }
+        _string(std::initializer_list<char_type>&& _il):
+            _string(){
+            _M_move_or_assign(_il.begin(), _il.end());
+        }
         template <typename _InputIter>
-        _string(_InputIter _begin, _InputIter _end){}
-        ~_string() _YXXX_NOEXCEPT{}
+        _string(_InputIter _begin, _InputIter _end):
+            _string(){
+            _M_copy_or_assign(_begin, _end);
+        }
+
+        _string(const alloctor_type& _alloc) _YXXX_NOEXCEPT:
+            _M_allocator(_alloc), _M_begin(nullptr),
+            _M_size(0), _M_capacity(0){}
+        _string(const char_type* _s, size_type _n = npos,
+            const alloctor_type& _alloc):
+            _string(_alloc){
+            _M_copy_or_assign(_s, _n);
+        }
+        _string(const _string& _str, const alloctor_type& _alloc):
+            _string(_alloc){
+            _M_copy_or_assign(_str.begin(), _str.end());
+        }
+        _string(const _string& _str, difference_type _begin,
+            size_type _n = npos, const alloctor_type& _alloc):
+            _string(_alloc){
+            if(_begin < _str._M_size){
+                if(npos == _n || _begin + _n >= _str._M_size)
+                    _M_copy_or_assign(_str.begin()+_begin, _str.end());
+                else
+                    _M_copy_or_assign(_str.begin()+_begin,
+                        _str.begin()+_begin+_n);
+            }
+        }
+        _string(_string&& _str, const alloctor_type& _alloc):
+            _string(_alloc){
+            _M_move_or_assign(_str.begin(), _str.end());
+        }
+        _string(std::initializer_list<char_type>&& _il,
+            const alloctor_type& _alloc):
+            _string(_alloc){
+            _M_move_or_assign(_il.begin(), _il.end());
+        }
+        template <typename _InputIter>
+        _string(_InputIter _begin, _InputIter _end,
+            const alloctor_type& _alloc):
+            _string(_alloc){
+            _M_copy_or_assign(_begin, _end);
+        }
+
+        ~_string() _YXXX_NOEXCEPT{
+            _M_clear();
+        };
+
+        self_type& operator=(){}
+        self_type& operator+=(){}
+        friend self_type
+        operator*(const _string& _str, size_type _n){}
+        friend self_type
+        operator*(size_type _n, const _string& _str){
+            return _str * _n;
+        }
+        self_type& operator*=(size_type _n){}
+
+        friend bool
+        operator>(const _string& _str1, const _string& _str2){}
+        friend bool
+        operator>=(const _string& _str1, const _string& _str2){}
+        friend bool
+        operator<(const _string& _str1, const _string& _str2){}
+        friend bool
+        operator<=(const _string& _str1, const _string& _str2){}
+        friend bool
+        operator==(const _string& _str1, const _string& _str2){}
+        friend bool
+        operator!=(const _string& _str1, const _string& _str2){}
+
+        void assign(){}
+        void push_back(const value_type& _c){}
+        void insert(){}
+        void replace(){}
+        void append(){}
+        void erase(){}
+        void pop_back(){}
+        void clear(){}
+        friend swap(_strint& _str1, _string& _str2)
+            _YXXX_NOEXCEPT{
+            std::swap(_str1._M_allocator, _str2._M_allocator);
+            std::swap(_str1._M_begin, _str2._M_begin);
+            std::swap(_str1._M_size, _str2._M_size);
+            std::swap(_str1._M_capacity, _str2._M_capacity);
+        }
+        void compare(){}
+
+        iterator find(){}
+        iterator rfind(){}
+        iterator find_first_of(){}
+        iterator find_last_of(){}
+        iterator find_first_not_of(){}
+        iterator find_last_not_of(){}
+
+        const char_type* c_str() const _YXXX_NOEXCEPT{}
+        void copy_to(char_type* _s){}
+
+        iterator
+        begin() _YXXX_NOEXCEPT{
+            return _M_begin;
+        }
+        const_iterator
+        begin() const _YXXX_NOEXCEPT{
+            return _M_begin;
+        }
+        iterator
+        end() _YXXX_NOEXCEPT{
+            return _M_begin + _M_size;
+        }
+        const_iterator
+        end() const _YXXX_NOEXCEPT{
+            return _M_begin + _M_size;
+        }
+        const_iterator
+        cbegin() const _YXXX_NOEXCEPT{
+            return _M_begin;
+        }
+        const_iterator
+        cend() const _YXXX_NOEXCEPT{
+            return _M_begin + _M_size;
+        }
+        reverse_iterator
+        rbegin() _YXXX_NOEXCEPT{
+            return end();
+        }
+        const_reverse_iterator
+        rbegin() const _YXXX_NOEXCEPT{
+            return end();
+        }
+        reverse_iterator
+        rend() _YXXX_NOEXCEPT{
+            return begin();
+        }
+        const_reverse_iterator
+        rend() const _YXXX_NOEXCEPT{
+            return begin();
+        }
+        const_reverse_iterator
+        crbegin() const _YXXX_NOEXCEPT{
+            return cend();
+        }
+        const_reverse_iterator
+        cend() const _YXXX_NOEXCEPT{
+            return cbegin();
+        }
+
     protected:
-        alloctor_type _M_alloc;
+        void _M_copy_or_assign(const char_type* _s, size_type _n){
+            size_type _len = _n;
+            if(npos == _n){
+                _YXXX_CONSTEXPR char_type null_char;
+                _len = 0;
+                while(_len < npos){
+                    if(null_char == _s[_len]) break;
+                    ++_len;
+                }
+            }
+            
+            if(_M_size) _M_clear();
+            _M_capacity = 1.5 * _len;
+            _M_begin = _M_allocator->allocate(_M_capacity);
+            memcpy(_M_begin, _s, _len * sizeof(char_type));
+            _M_size = _len;
+        }
+        template <typename _InputIter>
+        void _M_copy_or_assign(_InputIter _begin, _InputIter _end){
+            if(_M_size) _M_clear();
+            for(_InputIter _it = _begin; _it != _end; ++_it)
+                push_back(*_it);
+        }
+        template <typename _InputIter>
+        void _M_move_or_assign(_InputIter _begin, _InputIter _end){
+            if(_M_size) _M_clear();
+            for(_InputIter _it = _begin; _it != _end; ++_it)
+                push_back(std::move(*_it));
+        }
+        void _M_clear() _YXXX_NOEXCEPT{
+            _M_allocator->deallocate(_M_begin);
+            _M_begin = nullptr;
+            _M_size = _M_capacity = 0;
+        }
+
+        alloctor_type _M_allocator;
         char_type* _M_begin;
         size_type _M_size;
+        size_type _M_capacity;
     };
 
     template <typename _CharType = char,
