@@ -35,7 +35,7 @@ namespace _alloc{
         typedef _Tp&            reference;
         typedef const _Tp&      const_reference;
 
-        static const_pointer zero_bytes = ::operator new (0);
+        static const pointer zero_bytes;
 
         allocator() _YXXX_NOEXCEPT = default;
         template <typename _Up>
@@ -71,7 +71,7 @@ namespace _alloc{
             pointer _rtn = ::operator new(_need);
             if(zero_bytes != _ptr){
                 memmove(_rtn, _ptr, sizeof(value_type) * _size);
-                ::operator delete _ptr;
+                ::operator delete(_ptr);
             }
             return {_rtn, _need};
         }
@@ -126,6 +126,11 @@ namespace _alloc{
         typedef void     value_type;
         allocator()=delete;
     };
+
+    template <typename _Tp>
+    const typename allocator<_Tp>::pointer 
+    allocator<_Tp>::zero_bytes
+        = static_cast<pointer>(::operator new(0));
 };
 
 #endif

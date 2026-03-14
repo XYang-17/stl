@@ -261,7 +261,7 @@ std::runtime_error("Bytes of chunk is insufficient to accommodate at least one 4
         typedef _Tp&            reference;
         typedef const _Tp&      const_reference;
 
-        static const_pointer zero_bytes = ::operator new(0);
+        const static pointer zero_bytes;
 
         static _YXXX_CONSTEXPR stl::size_t block_size =
             sizeof(value_type) < sizeof(_chunk::count_type) ? 
@@ -375,6 +375,11 @@ std::runtime_error("Bytes of chunk is insufficient to accommodate at least one 4
         _retain _M_retain;
         _chunks_array* _M_pool;
     };
+
+    template <typename _Tp>
+    const typename _pool_allocator_base<_Tp>::pointer 
+    _pool_allocator_base<_Tp>::zero_bytes
+        = static_cast<pointer>(::operator new(0));
 };
 
 namespace _alloc{

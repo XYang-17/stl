@@ -15,28 +15,28 @@ namespace _char_traits{
         using char_type    = _CharType;
         using int_type     = typename _char_type<_CharType>::int_type;
     
-        static _YXXX_CONSTEXPR void
+        static  void
         assign(char_type& _c1, const char_type& _c2){
             _c1 = _c2;
         }
-        static _YXXX_CONSTEXPR void
+        static  void
         assign(char_type* _s, stl::size_t _n, const char_type& _c){
             for(stl::size_t _i = 0; _i < _n; ++_i)
                 _s[_i] = _c;
         }
-        static _YXXX_CONSTEXPR bool
+        static  bool
         eq(const char_type& _c1, const char_type& _c2){
             return _c1 == _c2;
         }
-        static _YXXX_CONSTEXPR bool
+        static  bool
         eq(const int_type& _a1, const int_type& _a2){
             return _a1 == _a2;
         }
-        static _YXXX_CONSTEXPR bool
+        static  bool
         lt(const char_type& _c1, const char_type& _c2){
             return _c1 < _c2;
         }
-        static _YXXX_CONSTEXPR int
+        static  int
         compare(const char_type* _s1, const char_type* _s2, stl::size_t _n){
             for(int _i = 0; _i < _n; ++_i){
                 if(lt(_s1[_i], _s2[_i])) return -1;
@@ -44,7 +44,7 @@ namespace _char_traits{
             }
             return 0;
         }
-        static _YXXX_CONSTEXPR stl::size_t
+        static  stl::size_t
         length(const char_type* _s){
             char_type null_char{};
             stl::size_t _l = 0;
@@ -52,27 +52,27 @@ namespace _char_traits{
                 ++_l;
             return _l;
         }
-        static _YXXX_CONSTEXPR const char_type*
+        static  const char_type*
         find(const char_type* _s, stl::size_t _n, const char_type& _t){
             for(stl::size_t _i = 0; _i < _n; ++_i)
                 if(eq(_s[_i], _t)) return _s + _i;
             return 0;
         }
-        static _YXXX_CONSTEXPR char_type* 
+        static  char_type* 
         copy(char_type* _s1, const char_type* _s2, stl::size_t _n){
             if(_n) memcpy(_s1, _s2, _n * sizeof(char_type));
             return _s1;
         }
-        static _YXXX_CONSTEXPR char_type*
+        static  char_type*
         move(char_type* _s1, const char_type* _s2, stl::size_t _n){
             if(_n) memmove(_s1, _s2, _n * sizeof(char_type));
             return _s1;
         }
-        static _YXXX_CONSTEXPR char_type
+        static  char_type
         to_char(const int_type& _a){
             return static_cast<char_type>(_a);
         }
-        static _YXXX_CONSTEXPR int_type
+        static  int_type
         to_int(const char_type& _c){
             return static_cast<int_type>(_c);
         }
@@ -82,34 +82,34 @@ namespace _char_traits{
         using char_type    = char;
         using int_type     = int;
         
-        static _YXXX_CONSTEXPR void
+        static  void
         assign(char_type& _c1, const char_type& _c2)
         _YXXX_NOEXCEPT{
             _c1 = _c2;
         }
-        static _YXXX_CONSTEXPR void
+        static  void
         assign(char_type* _s, stl::size_t _n, const char_type& _c)
         _YXXX_NOEXCEPT{
             for(stl::size_t _i = 0; _i < _n; ++_i)
                 _s[_i] = _c;
         }
-        static _YXXX_CONSTEXPR bool
+        static  bool
         eq(const char_type& _c1, const char_type& _c2)
         _YXXX_NOEXCEPT{
             return _c1 == _c2;
         }
-        static _YXXX_CONSTEXPR bool
+        static  bool
         eq(const int_type& _a1, const int_type& _a2)
         _YXXX_NOEXCEPT{
             return _a1 == _a2;
         }
-        static _YXXX_CONSTEXPR bool
+        static  bool
         lt(const char_type& _c1, const char_type& _c2)
         _YXXX_NOEXCEPT{
             return static_cast<unsigned char>(_c1)
                 < static_cast<unsigned char>(_c2);
         }
-        static _YXXX_CONSTEXPR int
+        static  int
         compare(const char_type* _s1, const char_type* _s2, stl::size_t _n)
         _YXXX_NOEXCEPT{
             for(int _i = 0; _i < _n; ++_i){
@@ -118,7 +118,7 @@ namespace _char_traits{
             }
             return 0;
         }
-        static _YXXX_CONSTEXPR stl::size_t
+        static  stl::size_t
         length(const char_type* _s) _YXXX_NOEXCEPT{
             char_type null_char{};
             stl::size_t _l = 0;
@@ -126,30 +126,30 @@ namespace _char_traits{
                 ++_l;
             return _l;
         }
-        static _YXXX_CONSTEXPR const char_type*
+        static  const char_type*
         find(const char_type* _s, stl::size_t _n, const char_type& _t)
         _YXXX_NOEXCEPT{
             for(stl::size_t _i = 0; _i < _n; ++_i)
                 if(eq(_s[_i], _t)) return _s + _i;
             return 0;
         }
-        static _YXXX_CONSTEXPR char_type* 
+        static  char_type* 
         copy(char_type* _s1, const char_type* _s2, stl::size_t _n)
         _YXXX_NOEXCEPT{
             if(_n) memcpy(_s1, _s2, _n * sizeof(char_type));
             return _s1;
         }
-        static _YXXX_CONSTEXPR char_type*
+        static  char_type*
         move(char_type* _s1, const char_type* _s2, stl::size_t _n)
         _YXXX_NOEXCEPT{
             if(_n) memmove(_s1, _s2, _n * sizeof(char_type));
             return _s1;
         }
-        static _YXXX_CONSTEXPR char_type
+        static  char_type
         to_char(const int_type& _a) _YXXX_NOEXCEPT{
             return static_cast<char_type>(_a);
         }
-        static _YXXX_CONSTEXPR int_type
+        static  int_type
         to_int(const char_type& _c) _YXXX_NOEXCEPT{
             return static_cast<int_type>(static_cast<unsigned char>(_c));
         }
@@ -161,28 +161,28 @@ namespace _char_traits{
         using char_type = wchar_t;
         using int_type  = wint_t;
 
-        static _YXXX_CONSTEXPR void
+        static  void
         assign(char_type& _c1, const char_type& _c2){
             _c1 = _c2;
         }
-        static _YXXX_CONSTEXPR void
+        static  void
         assign(char_type* _s, stl::size_t _n, const char_type& _c){
             for(stl::size_t _i = 0; _i < _n; ++_i)
                 _s[_i] = _c;
         }
-        static _YXXX_CONSTEXPR bool
+        static  bool
         eq(const char_type& _c1, const char_type& _c2){
             return _c1 == _c2;
         }
-        static _YXXX_CONSTEXPR bool
+        static  bool
         eq(const int_type& _a1, const int_type& _a2){
             return _a1 == _a2;
         }
-        static _YXXX_CONSTEXPR bool
+        static  bool
         lt(const char_type& _c1, const char_type& _c2){
             return _c1 < _c2;
         }
-        static _YXXX_CONSTEXPR int
+        static  int
         compare(const char_type* _s1, const char_type* _s2, stl::size_t _n){
             for(int _i = 0; _i < _n; ++_i){
                 if(lt(_s1[_i], _s2[_i])) return -1;
@@ -190,7 +190,7 @@ namespace _char_traits{
             }
             return 0;
         }
-        static _YXXX_CONSTEXPR stl::size_t
+        static  stl::size_t
         length(const char_type* _s){
             char_type null_char{};
             stl::size_t _l = 0;
@@ -198,27 +198,27 @@ namespace _char_traits{
                 ++_l;
             return _l;
         }
-        static _YXXX_CONSTEXPR const char_type*
+        static  const char_type*
         find(const char_type* _s, stl::size_t _n, const char_type& _t){
             for(stl::size_t _i = 0; _i < _n; ++_i)
                 if(eq(_s[_i], _t)) return _s + _i;
             return 0;
         }
-        static _YXXX_CONSTEXPR char_type* 
+        static  char_type* 
         copy(char_type* _s1, const char_type* _s2, stl::size_t _n){
             if(_n) memcpy(_s1, _s2, _n * sizeof(char_type));
             return _s1;
         }
-        static _YXXX_CONSTEXPR char_type*
+        static  char_type*
         move(char_type* _s1, const char_type* _s2, stl::size_t _n){
             if(_n) memmove(_s1, _s2, _n * sizeof(char_type));
             return _s1;
         }
-        static _YXXX_CONSTEXPR char_type
+        static  char_type
         to_char(const int_type& _a){
             return static_cast<char_type>(_a);
         }
-        static _YXXX_CONSTEXPR int_type
+        static  int_type
         to_int(const char_type& _c){
             return static_cast<int_type>(_c);
         }
@@ -239,9 +239,9 @@ namespace stl{
     public:
         using char_type        = _CharType;
         using traits_type      = _Traits;
-        using alloctor_type    = typename _alloc::alloc_rebind<_Alloc, _CharType>;
+        using allocator_type    = typename _alloc::alloc_rebind<_Alloc, _CharType>;
     protected:
-        using _alloc_traits = typename _alloc::_alloc_traits<alloctor_type>;
+        using _alloc_traits = typename _alloc::_alloc_traits<allocator_type>;
     public:
         using value_type       = typename _alloc_traits::value_type;
         using pointer          = typename _alloc_traits::pointer;
@@ -262,109 +262,179 @@ namespace stl{
 
         static const size_type npos = static_cast<size_type>(-1);
 
+        
         _string() _YXXX_NOEXCEPT:
-            _M_allocator(alloctor_type{}), _M_begin(nullptr),
+            _M_allocator(allocator_type{}), _M_begin(nullptr),
             _M_size(0), _M_capacity(0){}
-        _string(const char_type* _s, size_type _n = npos,
-            const char_type& _e = char_type{}):
-            _string(){
-            _M_copy_or_assign(_s, _n, _e);
-        }
+        _string(const allocator_type& _alloc):
+            _M_allocator(_alloc), _M_begin(nullptr),
+            _M_size(0), _M_capacity(0){}
+        _string(allocator_type&& _alloc):
+            _M_allocator(std::move(_alloc)), _M_begin(nullptr),
+            _M_size(0), _M_capacity(0){}
+        
         _string(const _string& _str):
-            _string(){
-            _M_copy_or_assign(_str.begin(), _str.end());
+            _string(_str.allocator()){
+            _M_copy_or_assign(_str._M_begin, _str._M_size);
         }
-        _string(const _string& _str, difference_type _begin,
-            size_type _n = npos):
-            _string(){
-            if(_begin < _str._M_size){
-                if(npos == _n || _begin + _n >= _str._M_size)
-                    _M_copy_or_assign(_str.begin()+_begin, _str.end());
-                else
-                    _M_copy_or_assign(_str.begin()+_begin,
-                        _str.begin()+_begin+_n);
-            }
+        _string(const _string& _str, const allocator_type& _alloc):
+            _string(_alloc){
+            _M_copy_or_assign(_str._M_begin, _str._M_size);
         }
+        _string(const _string& _str, allocator_type&& _alloc):
+            _string(std::move(_alloc)){
+            _M_copy_or_assign(_str._M_begin, _str._M_size);
+        }
+
+        _string(const _string& _str,
+            difference_type _begin, size_type _n = npos):
+            _string(_str, _begin, _n, _str.allocator()){}
+        _string(const _string& _str,
+            difference_type _begin, const allocator_type& _alloc):
+            _string(_str, _begin, npos, _alloc){}
+        _string(const _string& _str,
+            difference_type _begin, allocator_type&& _alloc):
+            _string(_str, _begin, npos, std::move(_alloc)){}
+        _string(const _string& _str,
+            difference_type _begin, size_type _n,
+            const allocator_type& _alloc):
+            _string(_alloc){
+            _M_copy_or_assign(_str._M_begin + _begin, _n);
+        }
+        _string(const _string& _str,
+            difference_type _begin, size_type _n,
+            allocator_type&& _alloc):
+            _string(std::move(_alloc)){
+            _M_copy_or_assign(_str._M_begin + _begin, _n);
+        }
+
         _string(_string&& _str):
-            _string(){
-            _M_move_or_assign(_str.begin(), _str.end());
+            _string(std::move(_str.allocator())){
+            _M_move_data(std::move(_str));
         }
-        _string(std::initializer_list<char_type>&& _il):
-            _string(){
-            _M_move_or_assign(_il.begin(), _il.end());
+        _string(_string&& _str, const allocator_type& _alloc):
+            _string(_alloc){
+            _M_move_data(std::move(_str));
         }
+        _string(_string&& _str, allocator_type && _alloc):
+            _string(std::move(_alloc)){
+            _M_move_data(std::move(_str));
+        }
+
         template <typename _InputIter>
         _string(_InputIter _begin, _InputIter _end):
             _string(){
             _M_copy_or_assign(_begin, _end);
         }
-
-        _string(const alloctor_type& _alloc) _YXXX_NOEXCEPT:
-            _M_allocator(_alloc), _M_begin(nullptr),
-            _M_size(0), _M_capacity(0){}
-        _string(const char_type* _s, size_type _n = npos,
-            const char_type& _e = char_type{},
-            const alloctor_type& _alloc):
+        template <typename _InputIter>
+        _string(_InputIter _begin, _InputIter _end,
+            const allocator_type& _alloc):
             _string(_alloc){
-            _M_copy_or_assign(_s, _n, _e);
-        }
-        _string(const _string& _str, const alloctor_type& _alloc):
-            _string(_alloc){
-            _M_copy_or_assign(_str.begin(), _str.end());
-        }
-        _string(const _string& _str, difference_type _begin,
-            size_type _n = npos, const alloctor_type& _alloc):
-            _string(_alloc){
-            if(_begin < _str._M_size){
-                if(npos == _n || _begin + _n >= _str._M_size)
-                    _M_copy_or_assign(_str.begin()+_begin, _str.end());
-                else
-                    _M_copy_or_assign(_str.begin()+_begin,
-                        _str.begin()+_begin+_n);
-            }
-        }
-        _string(_string&& _str, const alloctor_type& _alloc):
-            _string(_alloc){
-            _M_move_or_assign(_str.begin(), _str.end());
-        }
-        _string(std::initializer_list<char_type>&& _il,
-            const alloctor_type& _alloc):
-            _string(_alloc){
-            _M_move_or_assign(_il.begin(), _il.end());
+            _M_copy_or_assign(_begin, _end);
         }
         template <typename _InputIter>
         _string(_InputIter _begin, _InputIter _end,
-            const alloctor_type& _alloc):
-            _string(_alloc){
+            allocator_type&& _alloc):
+            _string(std::move(_alloc)){
             _M_copy_or_assign(_begin, _end);
+        }
+
+        _string(std::initializer_list<char_type>&& _il):
+            _string(){
+            _M_move_or_assign(_il.begin(), _il.end());
+        }
+        _string(std::initializer_list<char_type>&& _il,
+            const allocator_type& _alloc):
+            _string(_alloc){
+            _M_move_or_assign(_il.begin(), _il.end());
+        }
+        _string(std::initializer_list<char_type>&& _il,
+            allocator_type&& _alloc):
+            _string(std::move(_alloc)){
+            _M_move_or_assign(_il.begin(), _il.end());
+        }
+
+        _string(const char_type* _s, size_type _n):
+            _string(){
+            _M_copy_or_assign(_s, _n);
+        }
+        _string(const char_type* _s, size_type _n,
+            const allocator_type& _alloc):
+            _string(_alloc){
+            _M_copy_or_assign(_s, _n);
+        }
+        _string(const char_type* _s, size_type _n,
+            allocator_type&& _alloc):
+            _string(std::move(_alloc)){
+            _M_copy_or_assign(_s, _n);
+        }
+
+        _string(const char_type* _s, char_type _c = char_type{}):
+            _string(){
+            _M_copy_or_assign(_s, _M_len(_s, _c));
+        }
+        _string(const char_type* _s,
+            const allocator_type& _alloc):
+            _string(_alloc){
+            _M_copy_or_assign(_s, _M_len(_s, char_type{}));
+        }
+        _string(const char_type* _s,
+            allocator_type&& _alloc):
+            _string(std::move(_alloc)){
+            _M_copy_or_assign(_s, _M_len(_s, char_type{}));
+        }
+        _string(const char_type* _s, char_type _c,
+            const allocator_type& _alloc):
+            _string(_alloc){
+            _M_copy_or_assign(_s, _M_len(_s, _c));
+        }
+        _string(const char_type* _s, char_type _c,
+            allocator_type&& _alloc):
+            _string(std::move(_alloc)){
+            _M_copy_or_assign(_s, _M_len(_s, _c));
+        }
+
+        _string(size_type _n, const char_type& _c):
+            _string(){
+            _M_construct(_n, _c);
+        }
+        _string(size_type _n, const char_type& _c,
+            const allocator_type& _alloc):
+            _string(_alloc){
+            _M_construct(_n, _c);
+        }
+        _string(size_type _n, const char_type& _c,
+            allocator_type&& _alloc):
+            _string(std::move(_alloc)){
+            _M_construct(_n, _c);
         }
 
         ~_string() _YXXX_NOEXCEPT{
             _M_clear();
         };
 
-        self_type& operator=(){}
-        self_type& operator+=(){}
-        friend self_type
-        operator*(const _string& _str, size_type _n){}
-        friend self_type
-        operator*(size_type _n, const _string& _str){
-            return _str * _n;
-        }
-        self_type& operator*=(size_type _n){}
+        // self_type& operator=(){}
+        // self_type& operator+=(){}
+        // friend self_type
+        // operator*(const _string& _str, size_type _n){}
+        // friend self_type
+        // operator*(size_type _n, const _string& _str){
+        //     return _str * _n;
+        // }
+        // self_type& operator*=(size_type _n){}
 
-        friend bool
-        operator>(const _string& _str1, const _string& _str2){}
-        friend bool
-        operator>=(const _string& _str1, const _string& _str2){}
-        friend bool
-        operator<(const _string& _str1, const _string& _str2){}
-        friend bool
-        operator<=(const _string& _str1, const _string& _str2){}
-        friend bool
-        operator==(const _string& _str1, const _string& _str2){}
-        friend bool
-        operator!=(const _string& _str1, const _string& _str2){}
+        // friend bool
+        // operator>(const _string& _str1, const _string& _str2){}
+        // friend bool
+        // operator>=(const _string& _str1, const _string& _str2){}
+        // friend bool
+        // operator<(const _string& _str1, const _string& _str2){}
+        // friend bool
+        // operator<=(const _string& _str1, const _string& _str2){}
+        // friend bool
+        // operator==(const _string& _str1, const _string& _str2){}
+        // friend bool
+        // operator!=(const _string& _str1, const _string& _str2){}
 
         void assign(){}
 
@@ -400,39 +470,39 @@ namespace stl{
 
         insert_return_type
         insert(difference_type _index, const char_type& _c){
-            if(!valid(_index)) return end();
+            if(!_M_valid(_index)) return end();
             return _M_insert(_index, _c);
         }
         insert_return_type
         insert(difference_type _index, const char_type& _c,
             size_type _n){
-            if(!valid(_index)) return end();
+            if(!_M_valid(_index)) return end();
             return _M_insert(_index, _c, _n);
         }
         insert_return_type
         insert(difference_type _index, char_type&& _c){
-            if(!valid(_index)) return end();
+            if(!_M_valid(_index)) return end();
             return _M_insert(_index, std::move(_c));
         }
         insert_return_type
         insert(difference_type _index,
             const char_type* _s, size_type _n = npos,
             const char_type& _e = char_type{}){
-            if(!valid(_index)) return end();
+            if(!_M_valid(_index)) return end();
             _n = _M_len(_s, _n, _e);
             return _M_insert(_index, _s, _n);
         }
         insert_return_type
         insert(difference_type _index1, const _string& _str,
             difference_type _index2, size_type _n = npos){
-            if(!valid(_index1) || !_str.valid(_index2)) return end();
+            if(!_M_valid(_index1) || !_str._M_valid(_index2)) return end();
             _n = _str._M_len(_index2, _n);
             return _M_insert(_index1, _str._M_begin + _index2, _n);
         }
         template <typename Iter>
         insert_return_type
         insert(difference_type _index, Iter _begin, Iter _end){
-            if(!valid(_index)) return end();
+            if(!_M_valid(_index)) return end();
             difference_type _i = _index;
             while(_begin != _end){
                 insert(_i++, *_begin);
@@ -441,37 +511,37 @@ namespace stl{
         }
         insert_return_type
         insert(iterator _pos, const char_type& _c){
-            if(!valid(_pos)) return end();
+            if(!_M_valid(_pos)) return end();
             return _M_insert(_pos - begin(), _c);
         }
         insert_return_type
         insert(iterator _pos, const char_type& _c, size_type _n){
-            if(!valid(_pos)) return end();
+            if(!_M_valid(_pos)) return end();
             return _M_insert(_pos - begin(), _c, _n);
         }
         insert_return_type
         insert(iterator _pos, char_type&& _c){
-            if(!valid(_pos)) return end();
+            if(!_M_valid(_pos)) return end();
             return _M_insert(_pos - begin(), std::move(_c));
         }
         insert_return_type
         insert(iterator _pos, const char_type* _s,
             size_type _n = npos, const char_type& _e = char_type{}){
-            if(!valid(_pos)) return end();
+            if(!_M_valid(_pos)) return end();
             _n = _M_len(_s, _n, _e);
             return _M_insert(_pos - begin(), _s, _n);
         }
         insert_return_type
         insert(iterator _pos, const _string& _str,
             difference_type _index, size_type _n = npos){
-            if(!valid(_pos)) return end();
+            if(!_M_valid(_pos)) return end();
             _n = _str._M_len(_index, _n);
-            return _M_insert(_pos - beign(), _str._M_begin + _index, _n);
+            return _M_insert(_pos - begin(), _str._M_begin + _index, _n);
         }
         template <typename Iter>
         insert_return_type
         insert(iterator _pos, Iter _begin, Iter _end){
-            if(!valid(_pos)) return end();
+            if(!_M_valid(_pos)) return end();
             return _M_insert(_pos - begin(), _begin, _end);
         }
 
@@ -479,20 +549,20 @@ namespace stl{
             if(!empty()) --_M_size;
         }
         bool erase(difference_type _index){
-            if(!valid(_index)) return false;
+            if(!_M_valid(_index)) return false;
             return _M_erase(_index);
         }
         bool erase(iterator _pos){
-            if(!valid(_pos)) return false;
+            if(!_M_valid(_pos)) return false;
             return _M_erase(_pos - begin());
         }
         bool remove(difference_type _index,
             size_type _n = npos){
-            if(!valid(_index)) return false;
+            if(!_M_valid(_index)) return false;
             return _M_remove(_index, _n);
         }
         bool remove(iterator _begin, iterator _end = end()){
-            if(!valid(_begin) || !valid_end(_end)) return false;
+            if(!_M_valid(_begin) || !_M_valid_end(_end)) return false;
             return _M_remove(_begin - begin(), _end - _begin);
         }
         void clear() _YXXX_NOEXCEPT{
@@ -501,24 +571,24 @@ namespace stl{
 
         insert_return_type
         replace(difference_type _index, const char_type& _c){
-            if(!valid(_index)) return end();
+            if(!_M_valid(_index)) return end();
             return _M_replace(_M_begin + _index, _c);
         }
         insert_return_type
         replace(difference_type _index, char_type&& _c){
-            if(!valid(_index)) return end();
+            if(!_M_valid(_index)) return end();
             return _M_replace(_M_begin + _index, std::move(_c));
         }
         insert_return_type
         replace(difference_type _index, size_type _n, const char_type& _c){
-            if(!valid(_index)) return end();
+            if(!_M_valid(_index)) return end();
             if(_index + _n > _M_size) _n = _M_size - size_type(_index);
             return _M_replace(_M_begin + _index, _M_begin + _index + _n, _c);
         }
         insert_return_type
         replace(difference_type _index1, size_type _n1, const _string& _str,
             difference_type _index2 = 0, size_type _n2 = npos){
-            if(!valid(_index1) || !_str.valid(_index2)) return end();
+            if(!_M_valid(_index1) || !_str._M_valid(_index2)) return end();
             _n1 = _M_len(_index1, _n1);
             _n2 = _str._M_len(_index2, _n2);
             return _M_replace(_index1, _n1, _str._M_begin + _index2, _n2);
@@ -527,15 +597,15 @@ namespace stl{
         replace(difference_type _index, size_type _n1,
             const char_type* _s, size_type _n2 = npos,
             const char_type& _end_char = char_type{}){
-            if(!valid(_index)) return end();
+            if(!_M_valid(_index)) return end();
             _n1 = _M_len(_index, _n1);
             _n2 = _M_len(_s, _n2, _end_char);
             return _M_replace(_index, _n1, _s, _n2);
         }
         template <typename Iter>
-        replace(difference _index, size_type _n,
+        replace(difference_type _index, size_type _n,
             Iter _begin, Iter _end){
-            if(!valid(_index)) return end();
+            if(!_M_valid(_index)) return end();
             _n = _M_len(_index, _n);
             return _M_replace(
                 iterator{_M_begin + _index},
@@ -545,29 +615,29 @@ namespace stl{
         }
         insert_return_type
         replace(iterator _pos, const value_type& _c){
-            if(!valid(_pos)) return end();
+            if(!_M_valid(_pos)) return end();
             return _M_replace(_pos.base(), _c);
         }
         insert_return_type
         replace(iterator _pos, value_type&& _c){
-            if(!valid(_pos)) return end();
+            if(!_M_valid(_pos)) return end();
             return _M_replace(_pos.base(), std::move(_c));
         }
         insert_return_type
         replace(iterator _begin, iterator _end, const value_type& _c){
-            if(!valid(_begin) || !valid_end(_end) || _end <= _begin) return end();
+            if(!_M_valid(_begin) || !_M_valid_end(_end) || _end <= _begin) return end();
             return _M_replace(_begin.base(), _end.base(), _c);
         }
         template <typename Iter>
         insert_return_type
         replace(iterator _pos, Iter _it){
-            if(!valid(_pos)) return end();
+            if(!_M_valid(_pos)) return end();
             return _M_replace(_pos.base(), *_it);
         }
         insert_return_type
         replace(iterator _begin, iterator _end, const _string& _str,
             difference_type _index = 0, size_type _n = npos){
-            if(!valid(_begin) || !valid_end(_end) || _end <= _begin) return end();
+            if(!_M_valid(_begin) || !_M_valid_end(_end) || _end <= _begin) return end();
             _n = _str._M_len(_index, _n);
             return _M_replace(
                 difference_type(_begin - begin()),
@@ -578,7 +648,7 @@ namespace stl{
         replace(iterator _begin, iterator _end,
             const char_type* _s, size_type _n = npos,
             const char_type& _end_char = char_type{}){
-            if(!valid(_begin) || !valid_end(_end) || _end <= _begin) return end();
+            if(!_M_valid(_begin) || !_M_valid_end(_end) || _end <= _begin) return end();
             _n = _M_len(_s, _n, _end_char);
             return _M_replace(_begin.base() - _M_begin, _end - _begin, _s, _n);
         }
@@ -586,30 +656,28 @@ namespace stl{
         insert_return_type
         replace(iterator _begin1, iterator _end1,
             Iter _begin2, Iter _end2){
-            if(!valid(_begin1) || !valid_end(_end1) || _end1 <= _begin1) return end();
+            if(!_M_valid(_begin1) || !_M_valid_end(_end1) || _end1 <= _begin1) return end();
             return _M_replace(_begin1, _end1, _begin2, _end2);
         }
 
-        friend swap(_strint& _str1, _string& _str2)
+        friend void swap(_string& _str1, _string& _str2)
             _YXXX_NOEXCEPT{
             std::swap(_str1._M_allocator, _str2._M_allocator);
             std::swap(_str1._M_begin, _str2._M_begin);
             std::swap(_str1._M_size, _str2._M_size);
             std::swap(_str1._M_capacity, _str2._M_capacity);
         }
-        friend int compare(_strint& _str1, _string& _str2){
-            
-        }
+        // friend int compare(_string& _str1, _string& _str2){}
 
-        iterator find(){}
-        iterator rfind(){}
-        iterator find_first_of(){}
-        iterator find_last_of(){}
-        iterator find_first_not_of(){}
-        iterator find_last_not_of(){}
+        // iterator find(){}
+        // iterator rfind(){}
+        // iterator find_first_of(){}
+        // iterator find_last_of(){}
+        // iterator find_first_not_of(){}
+        // iterator find_last_not_of(){}
 
-        const char_type* c_str() const _YXXX_NOEXCEPT{}
-        void copy_to(char_type* _s){}
+        // const char_type* c_str() const _YXXX_NOEXCEPT{}
+        // void copy_to(char_type* _s){}
 
         iterator
         begin() _YXXX_NOEXCEPT{
@@ -656,8 +724,26 @@ namespace stl{
             return cend();
         }
         const_reverse_iterator
-        cend() const _YXXX_NOEXCEPT{
+        crend() const _YXXX_NOEXCEPT{
             return cbegin();
+        }
+
+        void shrink_to_fit(){
+            reserve(_M_size);
+        }
+        void reserve(size_type _n){
+            if(nullptr != _M_begin){
+                char_type* _new_begin = _M_allocator.allocate(_n);
+                if(_n < _M_size) _M_size = _n;
+                memmove(_new_begin, _M_begin, _M_size * sizeof(char_type));
+                _M_allocator.deallocatr(_M_begin);
+                _M_begin = _new_begin;
+            }
+            else{
+                _M_begin = _M_allocator.allocate(_n);
+                _M_size = _n;
+            }
+            _M_capacity = _n;
         }
 
         bool empty() const _YXXX_NOEXCEPT{
@@ -672,12 +758,15 @@ namespace stl{
         size_type capacity() const _YXXX_NOEXCEPT{
             return _M_capacity;
         }
+        allocator_type allocator() const{
+            return _M_allocator;
+        }
 
     protected:
-        static size_type _M_len(const char_type* _s, size_type _n,
+        static size_type _M_len(const char_type* _s,
             const char_type& _end_char){
             size_type _len = 0;
-            while(_len < _n){
+            while(_len < npos){
                 if(_end_char == _s[_len]) break;
                 ++_len;
             }
@@ -687,28 +776,33 @@ namespace stl{
             if(_M_size - size_type(_index) < _len) return _M_size - _index;
             return _len;
         }
-        bool valid(difference_type _index)
+        bool _M_valid(difference_type _index)
         const _YXXX_NOEXCEPT{
             return _index < _M_size && _index >= 0;
         }
-        bool valid(iterator _it)
+        bool _M_valid(iterator _it)
         const _YXXX_NOEXCEPT{
             return _it >= begin() && _it < end();
         }
-        bool valid_end(iterator _it)
+        bool _M_valid_end(iterator _it)
         const _YXXX_NOEXCEPT{
             return _it >= begin() && _it <= end();
         }
 
-        void _M_copy_or_assign(const char_type* _s, size_type _n,
-            const char_type& _end_char){
-            size_type _len = _M_len(_s, _n, _end_char);
-            
-            if(_M_size) _M_clear();
-            _M_capacity = 1.5 * _len;
-            _M_begin = _M_allocator->allocate(_M_capacity);
-            memcpy(_M_begin, _s, _len * sizeof(char_type));
-            _M_size = _len;
+        void _M_construct(size_type _n, const chat_type& _c){
+            reserve(_n);
+            std::fill_n(_M_begin, _n, _c);
+        }
+
+        void _M_copy_or_assign(const char_type* _s, size_type _n){
+            if(_n > _M_capacity){
+                _M_allocator.deallocate(_M_begin, _M_capacity);
+                // _M_begin = nullptr;
+                _M_capacity = 1.5 * _n;
+                _M_begin = _M_allocator.allocate(_M_capacity);
+            }
+            memcpy(_M_begin, _s, _n * sizeof(char_type));
+            _M_size = _n;
         }
         template <typename _InputIter>
         void _M_copy_or_assign(_InputIter _begin, _InputIter _end){
@@ -716,14 +810,33 @@ namespace stl{
             for(_InputIter _it = _begin; _it != _end; ++_it)
                 push_back(*_it);
         }
+        void _M_move_or_assign(const char_type* _s, size_type _n){
+            if(_n > _M_capacity){
+                _M_allocator.deallocate(_M_begin, _M_capacity);
+                // _M_begin = nullptr;
+                _M_capacity = 1.5 * _n;
+                _M_begin = _M_allocator.allocate(_M_capacity);
+            }
+            memmove(_M_begin, _s, _n * sizeof(char_type));
+            _M_size = _n;
+        }
         template <typename _InputIter>
         void _M_move_or_assign(_InputIter _begin, _InputIter _end){
             if(_M_size) _M_clear();
             for(_InputIter _it = _begin; _it != _end; ++_it)
                 push_back(std::move(*_it));
         }
+        
+        void _M_move_data(_string&& _str){
+            _M_move_or_assign(_str._M_begin, _str._M_size);
+            _str._M_after_move_data();
+        }
+        void _M_after_move_data(){
+            _M_size = 0;
+        }
+        
         void _M_clear() _YXXX_NOEXCEPT{
-            _M_allocator->deallocate(_M_begin);
+            _M_allocator.deallocate(_M_begin);
             _M_begin = nullptr;
             _M_size = _M_capacity = 0;
         }
@@ -890,13 +1003,13 @@ namespace stl{
             return _begin1;
         }
 
-        alloctor_type _M_allocator;
+        allocator_type _M_allocator;
         char_type* _M_begin;
         size_type _M_size;
         size_type _M_capacity;
     };
 
-    template <typename _CharType = char,
+    template <typename _CharType,
         typename _Traits = _char_traits::char_traits<_CharType>>
     using string = _string<_CharType, _Traits, _alloc::allocator<_CharType>>;
 };

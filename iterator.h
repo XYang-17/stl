@@ -182,6 +182,110 @@ namespace _iterator{
         return _l_iter.base() - _r_iter.base();
     }
 
+    // specification for (T*, const T*)
+    template <typename _Type>
+    inline _YXXX_CONSTEXPR bool
+    operator==(const normal_iterator<_Type*>& _l_iter,
+        const normal_iterator<const _Type*>& _r_iter)
+    _YXXX_NOEXCEPT{
+        return _l_iter.base() == _r_iter.base();
+    }
+    template <typename _Type>
+    inline _YXXX_CONSTEXPR bool
+    operator!=(const normal_iterator<_Type*>& _l_iter,
+        const normal_iterator<const _Type*>& _r_iter)
+    _YXXX_NOEXCEPT{
+        return _l_iter.base() != _r_iter.base();
+    }
+    template <typename _Type>
+    inline _YXXX_CONSTEXPR bool
+    operator<(const normal_iterator<_Type*>& _l_iter,
+        const normal_iterator<const _Type*>& _r_iter)
+    _YXXX_NOEXCEPT{
+        return _l_iter.base() < _r_iter.base();
+    }
+    template <typename _Type>
+    inline _YXXX_CONSTEXPR bool
+    operator>(const normal_iterator<_Type*>& _l_iter,
+        const normal_iterator<const _Type*>& _r_iter)
+    _YXXX_NOEXCEPT{
+        return _l_iter.base() > _r_iter.base();
+    }
+    template <typename _Type>
+    inline _YXXX_CONSTEXPR bool
+    operator<=(const normal_iterator<_Type*>& _l_iter,
+        const normal_iterator<const _Type*>& _r_iter)
+    _YXXX_NOEXCEPT{
+        return _l_iter.base() <= _r_iter.base();
+    }
+    template <typename _Type>
+    inline _YXXX_CONSTEXPR bool
+    operator>=(const normal_iterator<_Type*>& _l_iter,
+        const normal_iterator<const _Type*>& _r_iter)
+    _YXXX_NOEXCEPT{
+        return _l_iter.base() >= _r_iter.base();
+    }
+    template <typename _Type>
+    inline _YXXX_CONSTEXPR
+    typename normal_iterator<_Type*>::difference_type 
+    operator-(const normal_iterator<_Type*>& _l_iter,
+        const normal_iterator<const _Type*>& _r_iter)
+    _YXXX_NOEXCEPT{
+        return _l_iter.base() - _r_iter.base();
+    }
+
+    // specification for (const T*, T*)
+    template <typename _Type>
+    inline _YXXX_CONSTEXPR bool
+    operator==(const normal_iterator<const _Type*>& _l_iter,
+        const normal_iterator<_Type*>& _r_iter)
+    _YXXX_NOEXCEPT{
+        return _l_iter.base() == _r_iter.base();
+    }
+    template <typename _Type>
+    inline _YXXX_CONSTEXPR bool
+    operator!=(const normal_iterator<const _Type*>& _l_iter,
+        const normal_iterator<_Type*>& _r_iter)
+    _YXXX_NOEXCEPT{
+        return _l_iter.base() != _r_iter.base();
+    }
+    template <typename _Type>
+    inline _YXXX_CONSTEXPR bool
+    operator<(const normal_iterator<const _Type*>& _l_iter,
+        const normal_iterator<_Type*>& _r_iter)
+    _YXXX_NOEXCEPT{
+        return _l_iter.base() < _r_iter.base();
+    }
+    template <typename _Type>
+    inline _YXXX_CONSTEXPR bool
+    operator>(const normal_iterator<const _Type*>& _l_iter,
+        const normal_iterator<_Type*>& _r_iter)
+    _YXXX_NOEXCEPT{
+        return _l_iter.base() > _r_iter.base();
+    }
+    template <typename _Type>
+    inline _YXXX_CONSTEXPR bool
+    operator<=(const normal_iterator<const _Type*>& _l_iter,
+        const normal_iterator<_Type*>& _r_iter)
+    _YXXX_NOEXCEPT{
+        return _l_iter.base() <= _r_iter.base();
+    }
+    template <typename _Type>
+    inline _YXXX_CONSTEXPR bool
+    operator>=(const normal_iterator<const _Type*>& _l_iter,
+        const normal_iterator<_Type*>& _r_iter)
+    _YXXX_NOEXCEPT{
+        return _l_iter.base() >= _r_iter.base();
+    }
+    template <typename _Type>
+    inline _YXXX_CONSTEXPR
+    typename normal_iterator<_Type*>::difference_type 
+    operator-(const normal_iterator<const _Type*>& _l_iter,
+        const normal_iterator<_Type*>& _r_iter)
+    _YXXX_NOEXCEPT{
+        return _l_iter.base() - _r_iter.base();
+    }
+
     template <typename _Iterator>
     class reverse_iterator{
     public:
@@ -332,6 +436,110 @@ namespace _iterator{
     typename reverse_iterator<_Type>::difference_type 
     operator-(const reverse_iterator<_Type>& _l_iter,
         const reverse_iterator<_Type>& _r_iter)
+    _YXXX_NOEXCEPT{
+        return _l_iter.base() - _r_iter.base();
+    }
+
+    // specification for (T*, const T*)
+    template <typename _Type>
+    inline _YXXX_CONSTEXPR bool
+    operator==(const reverse_iterator<_Type*>& _l_iter,
+        const reverse_iterator<const _Type*>& _r_iter)
+    _YXXX_NOEXCEPT{
+        return _l_iter.base() == _r_iter.base();
+    }
+    template <typename _Type>
+    inline _YXXX_CONSTEXPR bool
+    operator!=(const reverse_iterator<_Type*>& _l_iter,
+        const reverse_iterator<const _Type*>& _r_iter)
+    _YXXX_NOEXCEPT{
+        return _l_iter.base() != _r_iter.base();
+    }
+    template <typename _Type>
+    inline _YXXX_CONSTEXPR bool
+    operator<(const reverse_iterator<_Type*>& _l_iter,
+        const reverse_iterator<const _Type*>& _r_iter)
+    _YXXX_NOEXCEPT{
+        return _l_iter.base() < _r_iter.base();
+    }
+    template <typename _Type>
+    inline _YXXX_CONSTEXPR bool
+    operator>(const reverse_iterator<_Type*>& _l_iter,
+        const reverse_iterator<const _Type*>& _r_iter)
+    _YXXX_NOEXCEPT{
+        return _l_iter.base() > _r_iter.base();
+    }
+    template <typename _Type>
+    inline _YXXX_CONSTEXPR bool
+    operator<=(const reverse_iterator<_Type*>& _l_iter,
+        const reverse_iterator<const _Type*>& _r_iter)
+    _YXXX_NOEXCEPT{
+        return _l_iter.base() <= _r_iter.base();
+    }
+    template <typename _Type>
+    inline _YXXX_CONSTEXPR bool
+    operator>=(const reverse_iterator<_Type*>& _l_iter,
+        const reverse_iterator<const _Type*>& _r_iter)
+    _YXXX_NOEXCEPT{
+        return _l_iter.base() >= _r_iter.base();
+    }
+    template <typename _Type>
+    inline _YXXX_CONSTEXPR
+    typename reverse_iterator<_Type*>::difference_type 
+    operator-(const reverse_iterator<_Type*>& _l_iter,
+        const reverse_iterator<const _Type*>& _r_iter)
+    _YXXX_NOEXCEPT{
+        return _l_iter.base() - _r_iter.base();
+    }
+
+    // specification for (const T*, T*)
+    template <typename _Type>
+    inline _YXXX_CONSTEXPR bool
+    operator==(const reverse_iterator<const _Type*>& _l_iter,
+        const reverse_iterator<_Type*>& _r_iter)
+    _YXXX_NOEXCEPT{
+        return _l_iter.base() == _r_iter.base();
+    }
+    template <typename _Type>
+    inline _YXXX_CONSTEXPR bool
+    operator!=(const reverse_iterator<const _Type*>& _l_iter,
+        const reverse_iterator<_Type*>& _r_iter)
+    _YXXX_NOEXCEPT{
+        return _l_iter.base() != _r_iter.base();
+    }
+    template <typename _Type>
+    inline _YXXX_CONSTEXPR bool
+    operator<(const reverse_iterator<const _Type*>& _l_iter,
+        const reverse_iterator<_Type*>& _r_iter)
+    _YXXX_NOEXCEPT{
+        return _l_iter.base() < _r_iter.base();
+    }
+    template <typename _Type>
+    inline _YXXX_CONSTEXPR bool
+    operator>(const reverse_iterator<const _Type*>& _l_iter,
+        const reverse_iterator<_Type*>& _r_iter)
+    _YXXX_NOEXCEPT{
+        return _l_iter.base() > _r_iter.base();
+    }
+    template <typename _Type>
+    inline _YXXX_CONSTEXPR bool
+    operator<=(const reverse_iterator<const _Type*>& _l_iter,
+        const reverse_iterator<_Type*>& _r_iter)
+    _YXXX_NOEXCEPT{
+        return _l_iter.base() <= _r_iter.base();
+    }
+    template <typename _Type>
+    inline _YXXX_CONSTEXPR bool
+    operator>=(const reverse_iterator<const _Type*>& _l_iter,
+        const reverse_iterator<_Type*>& _r_iter)
+    _YXXX_NOEXCEPT{
+        return _l_iter.base() >= _r_iter.base();
+    }
+    template <typename _Type>
+    inline _YXXX_CONSTEXPR
+    typename reverse_iterator<_Type*>::difference_type 
+    operator-(const reverse_iterator<const _Type*>& _l_iter,
+        const reverse_iterator<_Type*>& _r_iter)
     _YXXX_NOEXCEPT{
         return _l_iter.base() - _r_iter.base();
     }
