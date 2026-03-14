@@ -329,13 +329,19 @@ std::runtime_error("Bytes of chunk is insufficient to accommodate at least one 4
             return false;
         }
 
-        _YXXX_CONSTEXPR bool
-        expandable(pointer _ptr, size_type _size){
-            
+        bool expandable(pointer _ptr, size_type _size = 0,
+            size_type _need = 0) const{
+            return false;
         }
-        pointer expand(pointer _ptr, size_type _size){
-            if(zero_bytes == _ptr) return zero_bytes;
-            
+        std::pair<pointer, size_type>
+        expand(pointer _ptr, size_type _size, size_type _need){
+            if(_need <= _size) return {_ptr, _size};
+            pointer _rtn = ::operator new(_need);
+            if(zero_bytes != _ptr){
+                memmove(_rtn, _ptr, sizeof(value_type) * _size);
+                ::operator delete _ptr;
+            }
+            return {_rtn, _need};
         }
         
     private:

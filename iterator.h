@@ -124,6 +124,10 @@ namespace _iterator{
         base() const _YXXX_NOEXCEPT{
             return _M_iter;
         }
+        _YXXX_CONSTEXPR base_iterator
+        base() _YXXX_NOEXCEPT{
+            return _M_iter;
+        }
     protected:
         base_iterator _M_iter;
     };

@@ -88,20 +88,21 @@ namespace stl{
             const value_type& _value){
             emplace(_index, _value);
         }
-        void insert(difference_type _index, value_type&& _value){
+        void insert(difference_type _index,
+            value_type&& _value){
             emplace(_index, std::move(_value));
         }
         template <typename ...Args>
         void emplace_back(Args&& ..._args){
             _M_may_expand();
-             _M_begin[_M_size++] = value_type(
+            _M_begin[_M_size++] = value_type(
                 std::forward<Args>(_args)...
             );
         }
         template <typename ...Args>
         void emplace(difference_type _index, Args&& ..._args){
             _index = _M_before_insert(_index);
-             _M_begin[_index] = value_type(
+            _M_begin[_index] = value_type(
                 std::forward<Args>(_args)...
             );
         }
@@ -111,7 +112,7 @@ namespace stl{
         void erase(difference_type _index)
         _YXXX_NOEXCEPT{
             for(int i = _index;i < _M_size;){
-                 _M_begin[i] = _M_begin[++i];
+                 _M_begin[i] = std::move(_M_begin[++i]);
             }
             --_M_size;
         }

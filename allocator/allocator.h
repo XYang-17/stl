@@ -59,17 +59,21 @@ namespace _alloc{
             ::operator delete(_ptr);
         }
 
+        /* 扩充_ptr指向的内存块，_size指示扩充前内存块的大小,_need指示扩充后内存块的最小容量 */
         _YXXX_CONSTEXPR bool
-        expandable(pointer _ptr, size_type _size){
+        expandable(pointer _ptr, size_type _size = 0,
+            size_type _need = 0) const{
             return false;
         }
-        /* 扩充_ptr指向的内存块，_size指示原有内存块的大小 */
-        pointer expand(pointer _ptr, size_type _size){
-            if(zero_bytes == _ptr) return zero_bytes;
-            pointer _rtn = ::operator new(_size * 2);
-            memmove(_rtn, _ptr, sizeof(value_type) * _size);
-            ::operator delete _ptr;
-            return _rtn;
+        std::pair<pointer, size_type>
+        expand(pointer _ptr, size_type _size, size_type _need){
+            if(_need <= _size) return {_ptr, _size};
+            pointer _rtn = ::operator new(_need);
+            if(zero_bytes != _ptr){
+                memmove(_rtn, _ptr, sizeof(value_type) * _size);
+                ::operator delete _ptr;
+            }
+            return {_rtn, _need};
         }
         
         /* 在_ptr指向的地址构造value_type对象 */
