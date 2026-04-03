@@ -2,7 +2,7 @@
 #define _YXXX_PRIORITY_QUEUE_H_
 
 #include "./array.h"
-#include "./heap.h"
+#include "./structure/heap.h"
 #include "../function.h"
 
 namespace stl{

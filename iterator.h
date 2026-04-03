@@ -1,15 +1,18 @@
 #ifndef _YXXX_ITERATOR_H_
 #define _YXXX_ITERATOR_H_
 
+#include <type_traits>
 #include "adaptive_c++config.h"
 
 namespace stl{
+    // iterator_tag
     class input_iterator_tag{};
     class output_iterator_tag{};
     class forward_iterator_tag: public input_iterator_tag{};
     class bidirectional_iterator_tag: public forward_iterator_tag{};
     class random_access_iterator_tag: public bidirectional_iterator_tag{};
 
+    // iterator_traits
     template <typename _Iterator>
     class iterator_traits{
     public:
@@ -36,6 +39,30 @@ namespace stl{
         typedef stl::random_access_iterator_tag       iterator_category;
     };
 
+    // iterator check
+    template <typename _Iterator, typename = void>
+    struct is_iterator: std::false_type {};
+
+    template <typename _Iterator>
+    struct is_iterator<_Iterator, std::void_t<
+        typename std::iterator_traits<_Iterator>::iterator_category>>
+    : std::true_type {};
+
+    template <typename _Iterator>
+    inline constexpr bool is_iterator_v = is_iterator<_Iterator>::value;
+
+    template <typename _Iterator, typename = void>
+    struct is_random_access_iterator: std::false_type{};
+
+    template <typename _Iterator>
+    struct is_random_access_iterator<_Iterator, std::void_t<
+        typename std::iterator_traits<_Iterator>::iterator_category>>:
+        std::is_base_of<stl::random_access_iterator_tag,
+            typename stl::iterator_traits<_Iterator>::iterator_category>{};
+
+    template <typename _Iterator>
+    inline constexpr bool is_random_access_iterator_v
+        = is_random_access_iterator<_Iterator>::value;
 };
 
 namespace _iterator{

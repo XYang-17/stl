@@ -2,7 +2,7 @@
 #define _YXXX_TREE_SET_H_
 
 #include <bits/stl_pair.h>
-#include "./tree/tree_base.h"
+#include "./structure/tree_base.h"
 #include "../function.h"
 
 namespace stl{

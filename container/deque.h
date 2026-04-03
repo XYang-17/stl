@@ -2,6 +2,7 @@
 #define _YXXX_DEQUE_H_
 
 #include "./_container_base.h"
+#include <bits/stl_pair.h>
 
 namespace stl{
     namespace _deque{
@@ -219,7 +220,7 @@ namespace stl{
         deque(self_type&& _deq) _YXXX_NOEXCEPT{_M_move(_deq);}
         deque(std::initializer_list<value_type>&& _list) _YXXX_NOEXCEPT:
             deque(_list.size()){
-            _M_move_or_assign(_list.begin(), _list.end());
+            _M_copy_or_assign(_list.begin(), _list.end());
         }
         template <typename _Iterator>
         deque(_Iterator _first, _Iterator _last,
@@ -366,6 +367,48 @@ namespace stl{
             return _deque::_deque_block_bytes(sizeof(value_type));
         }
 
+        // bool _M_valid(difference_type _idx)
+        // const _YXXX_NOEXCEPT{
+        //     return size_type(_idx) < _M_size;
+        // }
+        // bool _M_valid(iterator _pos)
+        // const _YXXX_NOEXCEPT{
+        //     return _M_valid(_M_idx(_pos));
+        // }
+        // bool _M_valid_insert(difference_type _idx)
+        // const _YXXX_NOEXCEPT{
+        //     return size_type(_idx) <= _M_size;
+        // }
+        // bool _M_valid_insert(iterator _pos)
+        // const _YXXX_NOEXCEPT{
+        //     return _M_valid_insert(_M_idx(_pos));
+        // }
+        // difference_type _M_idx(iteraor _pos)
+        // const _YXXX_NOEXCEPT{
+        //     return (_pos._M_block - _M_start) * difference_type(_M_block_size()) +
+        //         - (_M_begin - *_M_start) - (_pos.last - _pos._M_iter + 1);
+        // }
+        // iterator _M_it(difference_type _idx)
+        // const _YXXX_NOEXCEPT{
+        //     auto _offset_pair = _M_offset(_idx);
+        //     pointer _block_ptr = _M_map + _offset_pair.first;
+        //     return {*_block_ptr + _offset_pair.second, _block_ptr};
+        // }
+
+        // size_type _M_front_unused() const _YXXX_NOEXCEPT{
+        //     return size_type(_M_begin - *_M_start)
+        //         + size_type(_M_start - _M_map) * _M_block_size();
+        // }
+        // std::pair<difference_type, difference_type>
+        // _M_offset(difference_type _idx)
+        // const _YXXX_NOEXCEPT{
+        //     _idx += difference_type(_M_front_unused());
+        //     difference_type _map_offset = _idx / difference_type(_M_block_size());
+        //     difference_type _block_offset = _idx % difference_type(_M_block_size());
+        //     if(_block_offset) ++_map_offset;
+        //     return {_map_offset, _block_offset};
+        // }
+
         void _M_init(size_type _capacity, const allocator_type& _alloc) _YXXX_NOEXCEPT{
             _M_allocator = _alloc;
             _M_map_capacity = _capacity % _M_block_size() ?
@@ -408,48 +451,6 @@ namespace stl{
            _M_map_capacity = 0;
         }
 
-        template <typename _Iterator>
-        std::tuple<pointer, _Iterator>
-        _M_copy_to_block(pointer _begin, pointer _end,
-            _Iterator _src_begin, _Iterator _src_end) _YXXX_NOEXCEPT{
-            while(_begin != _end && _src_begin != _src_end)
-                *(_begin++) = *(_src_begin++);
-            return std::tuple<pointer, _Iterator>{_begin, _src_begin};
-        }
-        template <typename _Iterator>
-        void _M_copy_or_assign(_Iterator _begin, _Iterator _end) _YXXX_NOEXCEPT{
-            clear();
-            _map_pointer _map_iter = _M_start, _map_end = _M_map + _M_map_capacity;
-            while(_begin != _end){
-                _M_may_expand_back();
-                while(_map_iter != _map_end && _begin != _end){
-                    std::tie(_M_end, _begin) = _M_copy_to_block(
-                        *_map_iter, *(_map_iter) + _M_block_size(), _begin, _end);
-                    _M_over = ++_map_iter;
-                }
-            }
-        }
-        template <typename _Iterator>
-        std::tuple<pointer, _Iterator>
-        _M_move_to_block(pointer _begin, pointer _end,
-            _Iterator _src_begin, _Iterator _src_end) _YXXX_NOEXCEPT{
-            while(_begin != _end && _src_begin != _src_end)
-                *(_begin++) = std::move(*(_src_begin++));
-            return std::tuple<pointer, _Iterator>{_begin, _src_begin};
-        }
-        template <typename _Iterator>
-        void _M_move_or_assign(_Iterator _begin, _Iterator _end) _YXXX_NOEXCEPT{
-            clear();
-            _map_pointer _map_iter = _M_start, _map_end = _M_map + _M_map_capacity;
-            while(_begin != _end){
-                _M_may_expand_back();
-                while(_map_iter != _map_end && _begin != _end){
-                    std::tie(_M_end, _begin) = _M_move_to_block(
-                        *_map_iter, *(_map_iter) + _M_block_size(), _begin, _end);
-                    _M_over = ++_map_iter;
-                }
-            }
-        }
         void _M_expand_front() _YXXX_NOEXCEPT{
             size_type _new_map_capacity = _M_map_capacity * 1.5 + 1;
             _map_pointer _new_map = _map_alloc(_M_allocator).allocate(_new_map_capacity);
@@ -482,6 +483,29 @@ namespace stl{
             _M_map = _new_map;
             _M_map_capacity = _new_map_capacity;
         }
+
+        template <typename _Iterator>
+        std::tuple<pointer, _Iterator>
+        _M_copy_to_block(pointer _begin, pointer _end,
+            _Iterator _src_begin, _Iterator _src_end) _YXXX_NOEXCEPT{
+            while(_begin != _end && _src_begin != _src_end)
+                *(_begin++) = *(_src_begin++);
+            return std::tuple<pointer, _Iterator>{_begin, _src_begin};
+        }
+        template <typename _Iterator>
+        void _M_copy_or_assign(_Iterator _begin, _Iterator _end) _YXXX_NOEXCEPT{
+            clear();
+            _map_pointer _map_iter = _M_start, _map_end = _M_map + _M_map_capacity;
+            while(_begin != _end){
+                _M_may_expand_back();
+                while(_map_iter != _map_end && _begin != _end){
+                    std::tie(_M_end, _begin) = _M_copy_to_block(
+                        *_map_iter, *(_map_iter) + _M_block_size(), _begin, _end);
+                    _M_over = ++_map_iter;
+                }
+            }
+        }
+
         void _M_may_expand_back() _YXXX_NOEXCEPT{
             if(_M_over == _M_map + _M_map_capacity
                 && _M_end == *(_M_over - 1) + _M_block_size())
@@ -510,6 +534,7 @@ namespace stl{
         _map_pointer _M_over;
         pointer _M_begin;
         pointer _M_end;
+        size_type _M_size;
     };
 };
 

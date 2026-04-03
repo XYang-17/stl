@@ -2,7 +2,7 @@
 #define _YXXX_TREE_MAP_H_
 
 #include <bits/stl_pair.h>
-#include "./tree/rb_tree.h"
+#include "./structure/rb_tree.h"
 #include "../function.h"
 
 namespace stl{

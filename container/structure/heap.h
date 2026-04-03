@@ -2,18 +2,14 @@
  #define _YXXX_HEAP_H_
 
 #include <type_traits>
-#include "../iterator.h"
+#include "../../iterator.h"
 
 namespace stl{
     namespace _heap{
         template <typename _RandomAccessIterator, typename _Comp>
-        typename std::enable_if_t<
-            std::is_base_of<
-                stl::random_access_iterator_tag,
-                typename stl::iterator_traits<_RandomAccessIterator>::iterator_category
-            >::value,
-            _RandomAccessIterator
-        >
+        std::enable_if_t<
+            stl::is_random_access_iterator_v<_RandomAccessIterator>,
+            _RandomAccessIterator>
         _adjust_heap(_RandomAccessIterator _begin, _RandomAccessIterator _iter,
                 _RandomAccessIterator _end, const _Comp& _comp){
             _RandomAccessIterator comp_iter = _iter + (_iter - _begin) + 1;
@@ -29,12 +25,8 @@ namespace stl{
 
         template <typename _RandomAccessIterator, typename _Comp>
         std::enable_if_t<
-            std::is_base_of<
-                stl::random_access_iterator_tag,
-                typename stl::iterator_traits<_RandomAccessIterator>::iterator_category
-            >::value,
-            void
-        >
+            stl::is_random_access_iterator_v<_RandomAccessIterator>,
+            void>
         inline make_heap(_RandomAccessIterator _begin, _RandomAccessIterator _end, const _Comp& _comp){
             if(_end - _begin < 2) return;
             _RandomAccessIterator _iter = _begin + ((_end - _begin - 1) >> 1);
@@ -46,12 +38,8 @@ namespace stl{
 
         template <typename _RandomAccessIterator, typename _Comp>
         std::enable_if_t<
-            std::is_base_of<
-                stl::random_access_iterator_tag,
-                typename stl::iterator_traits<_RandomAccessIterator>::iterator_category
-            >::value,
-            void
-        >
+            stl::is_random_access_iterator_v<_RandomAccessIterator>,
+            void>
         inline push_heap(_RandomAccessIterator _begin, _RandomAccessIterator _end, const _Comp& _comp){
             if(_end - _begin < 2) return;
             typename _RandomAccessIterator::difference_type _offset;
@@ -68,12 +56,8 @@ namespace stl{
         
         template <typename _RandomAccessIterator, typename _Comp>
         std::enable_if_t<
-            std::is_base_of<
-                random_access_iterator_tag,
-                typename iterator_traits<_RandomAccessIterator>::iterator_category
-            >::value,
-            void
-        >
+            stl::is_random_access_iterator_v<_RandomAccessIterator>,
+            void>
         inline pop_heap(_RandomAccessIterator _begin, _RandomAccessIterator _end, const _Comp& _comp){
             std::swap(*_begin, *(_end-1));
             _adjust_heap(_begin, _begin, _end-1, _comp);
@@ -81,12 +65,8 @@ namespace stl{
 
         template <typename _RandomAccessIterator, typename _Comp>
         std::enable_if_t<
-            std::is_base_of<
-                random_access_iterator_tag,
-                typename iterator_traits<_RandomAccessIterator>::iterator_category
-            >::value,
-            bool
-        >
+            stl::is_random_access_iterator_v<_RandomAccessIterator>,
+            bool>
         inline is_heap(_RandomAccessIterator _begin, _RandomAccessIterator _end, const _Comp& _comp){
             _RandomAccessIterator _iter = _begin;
             _RandomAccessIterator _over = _begin + ((_end - _begin - 1) >> 1);
