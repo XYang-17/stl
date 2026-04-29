@@ -125,25 +125,22 @@ namespace stl{
         }
 
         _RandomIter left=_begin, right=_end-1, mid = _begin + (size >> 1);
-        {
-            _RandomIter max = left, min = right;
-            if(*max < *min) std::swap(max, min);
-            if(*mid > *max){
-                if(max!=left) std::swap(*left, *right);
-            }
-            else if(*mid < *min){
-                if(min!=left) std::swap(*left, *right);
-            }
-            else{
-                std::swap(*left, *mid);
-            }
+        if(_comp(*right, *mid)) std::swap(*mid, *right);
+        if(_comp(*left, *mid)) std::swap(*left, *mid);
+        else if(_comp(*right, *left)) std::swap(*left, *right);
+        mid = left;
+        while(1){
+            do ++left; while(left < right && _comp(*left, *mid));
+            do --right; while(left < right && _comp(*mid, *right));
+            if(left < right) std::swap(*left, *right);
+            else break;
         }
-        auto base = *_begin;
-        left = stl::partition(left, right,
-            [&_comp, &base](const value_type& _v){return _comp(_v, base);});
 
-        stl::quick_sort(_begin, left, std::forward<Comp>(_comp));
-        stl::quick_sort(left+1, _end, std::forward<Comp>(_comp));
+        if(mid + 1 != left){
+            std::swap(*mid, *(left-1));
+            stl::quick_sort(_begin, left-1, std::forward<Comp>(_comp));
+        }
+        stl::quick_sort(left, _end, std::forward<Comp>(_comp));
     }
     template <typename _RandomIter, typename Comp>
     void merge_sort(_RandomIter _begin, _RandomIter _end, Comp&& _comp){
